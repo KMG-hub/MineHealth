@@ -37,7 +37,7 @@ namespace Utility
                 {
                     conn.Open();
                     string qry = "INSERT INTO UserInfoTbl(Phone, Pswd, Birth, Nickname, Gender) VALUES ('" 
-                        + Phone + "', '" + Pswd + "', '" + Birth + "', '" + Nickname + "', '" + Gender + ");";
+                        + Phone + "', '" + Pswd + "', '" + Birth + "', '" + Nickname + "', '" + Gender + "');";
 
                     MySqlCommand cmd = new MySqlCommand(qry, conn);
                     result = cmd.ExecuteNonQuery();
@@ -59,7 +59,7 @@ namespace Utility
         public static int CheckDuplicationPhone(string Phone)
         {
             int result = 0;
-            using (MySqlConnection conn = new MySqlConnection("Server=" + ServerIP + ";Port=" + Port + ";Database=" + DataBase + ";Uid=" + Uid + ";Pwd=" + Pwd))
+            using (MySqlConnection conn = new MySqlConnection(connStr))
             {
                 try
                 {
