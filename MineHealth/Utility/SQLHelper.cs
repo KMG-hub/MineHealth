@@ -11,7 +11,7 @@ namespace Utility
 
         const string ServerIP = "localhost";
         //private const string ServerIP = "211.104.146.87";
-        private const string Port = "53383";
+        private const string Port = "3306";
         private const string DataBase = "MineHealth";
         private const string Uid = "minehealthsql";
         private const string Pwd = "minehealthsql";
