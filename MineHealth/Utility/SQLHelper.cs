@@ -16,9 +16,9 @@ namespace Utility
         private const string Uid = "minehealthsql";
         private const string Pwd = "minehealthsql";
 
-        public static bool CheckDuplicationPhone(string Phone)
+        public static int CheckDuplicationPhone(string Phone)
         {
-            bool result = false;
+            int result = 0;
             using (MySqlConnection conn = new MySqlConnection("Server=" + ServerIP + ";Port=" + Port + ";Database=" + DataBase + ";Uid=" + Uid + ";Pwd=" + Pwd))
             {
                 try
@@ -27,10 +27,7 @@ namespace Utility
                     string qry = "SELECT COUNT(*) FROM UserInfoTbl WHERE Phone = '" + Phone + "'";
                     MySqlCommand cmd = new MySqlCommand(qry, conn);
 
-                    if (cmd.ExecuteNonQuery() > 0)
-                    {
-                        result = true;
-                    }
+                    result = Convert.ToInt32(cmd.ExecuteScalar());
                 }
                 catch (Exception ex)
                 {
