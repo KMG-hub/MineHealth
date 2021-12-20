@@ -24,7 +24,7 @@ namespace Utility
                 try
                 {
                     conn.Open();
-                    string qry = "SELECT COUNT(*) FROM UserInfoTbl Where = '" + Phone + "'";
+                    string qry = "SELECT COUNT(*) FROM UserInfoTbl WHERE Phone = '" + Phone + "'";
                     MySqlCommand cmd = new MySqlCommand(qry, conn);
 
                     if (cmd.ExecuteNonQuery() > 0)
