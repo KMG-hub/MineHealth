@@ -54,8 +54,6 @@ namespace Utility
             }
             return result;
         }
-
-
         /// <summary>
         /// 회원가입 요청
         /// </summary>
@@ -78,8 +76,10 @@ namespace Utility
                     Console.WriteLine("Query: " + qry);
 
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand(qry, conn);
-                    result = cmd.ExecuteNonQuery();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        result = cmd.ExecuteNonQuery();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -91,7 +91,6 @@ namespace Utility
 
             return result;
         }
-
         /// <summary>
         /// 회원 정보 수정 요청, 핸드폰번호는 수정 불가.
         /// </summary>
@@ -114,12 +113,14 @@ namespace Utility
                     if (!string.IsNullOrEmpty(Nickname)) qry += " Nickname = '" + Nickname + "', ";
                     if (!string.IsNullOrEmpty(Gender)) qry += " Gender = '" + Gender + "', ";
                     qry.Substring(qry.Length - 2);
-                    qry += " WHERE Phone = '" + Phone +"'";
+                    qry += " WHERE Phone = '" + Phone +"';";
 
                     Console.WriteLine("Query: " + qry);
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand(qry, conn);
-                    result = Convert.ToInt32(cmd.ExecuteScalar());
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        result = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -129,8 +130,6 @@ namespace Utility
             }
             return result;
         }
-
-
         /// <summary>
         /// 핸드폰 번호 중복 확인 
         /// </summary>
@@ -144,10 +143,81 @@ namespace Utility
                 try
                 {
                     conn.Open();
-                    string qry = "SELECT COUNT(*) FROM UserInfoTbl WHERE Phone = '" + Phone + "'";
-                    MySqlCommand cmd = new MySqlCommand(qry, conn);
+                    string qry = "SELECT COUNT(*) FROM UserInfoTbl WHERE Phone = '" + Phone + "';";
 
-                    result = Convert.ToInt32(cmd.ExecuteScalar());
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        result = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// 유저 정보 삭제
+        /// </summary>
+        /// <param name="Phone"></param>
+        /// <param name="Pswd"></param>
+        /// <returns></returns>
+        public static int DeleteUserInfo(string Phone, string Pswd)
+        {
+            int result = 0;
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "DELETE FROM UserInfoTbl WHERE Phone = '" + Phone + "' AND Pswd = '" + Pswd + "';";
+                    Console.WriteLine("Query: " + qry);
+
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        result = cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result = -1;
+                    Console.WriteLine("실패");
+                    Console.WriteLine(DateTime.Now.ToString() + " Error: " + ex.ToString());
+                }
+            }
+
+            return result;
+        }
+
+
+        public static string RequestTestDateTime(string Phone, int number = 0)
+        {
+            string result = null;
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "SELECT TestDate FROM UserLogTbl WHERE = '" + Phone + "' ";
+                    if (number != 0) qry += "LIMIT " + number.ToString();
+                    Console.WriteLine("Query: " + qry);
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            result = "";
+                            while (reader.Read())
+                            {
+                                result += reader[0] + ",";
+                            }
+                            if (result.Length > 0)
+                                result = result.Substring(result.Length - 1);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -159,6 +229,39 @@ namespace Utility
             return result;
         }
 
+        public static string RequestScoreQuestion1()
+        {
+            string result = null;
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    //string qry = "SELECT TestDate FROM UserLogTbl WHERE = '" + Phone + "' ";
+                    //if (number != 0) qry += "LIMIT " + number.ToString();
+                    //Console.WriteLine("Query: " + qry);
+                    //conn.Open();
+                    //using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    //{
+                    //    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    //    {
+                    //        result = "";
+                    //        while (reader.Read())
+                    //        {
+                    //            result += reader[0] + ",";
+                    //        }
+                    //        if (result.Length > 0)
+                    //            result = result.Substring(result.Length - 1);
+                    //    }
+                    //}
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
 
+            return result;
+        }
     }
 }
