@@ -37,7 +37,7 @@ namespace MineHealth
 
                     if (strMsg.Contains("SIGNIN"))
                     {
-                        strMsg.Replace("SIGNIN", "");
+                        strMsg = strMsg.Replace("SIGNIN", "");
                         var splitStr = strMsg.Split(',');
                         strMsg = SQLHelper.RequestSignIn(splitStr[0], splitStr[1], splitStr[2], splitStr[3], splitStr[4]).ToString();
                     }
