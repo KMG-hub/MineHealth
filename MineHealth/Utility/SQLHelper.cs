@@ -214,8 +214,8 @@ namespace Utility
                             {
                                 result += reader[0] + ",";
                             }
-                            //if (result.Length > 0)
-                            //    result = result.Substring(result.Length - 1);
+                            if (result.Length > 0)
+                                result = result.Remove(result.Length - 1);
                         }
                     }
                 }
