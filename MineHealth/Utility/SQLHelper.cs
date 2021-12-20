@@ -35,10 +35,16 @@ namespace Utility
                     Console.WriteLine("Query: " + qry);
 
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand(qry, conn);
-                    MySqlDataReader reader = cmd.ExecuteReader();
 
-                    result = reader["Phone"].ToString() + "," + reader["Nickname"].ToString() + "," + reader["Birth"].ToString() + "," +reader["Gender"].ToString();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            reader.Read();
+                            result = reader["Phone"].ToString() + "," + reader["Nickname"].ToString() + "," + reader["Birth"].ToString() + "," + reader["Gender"].ToString();
+                            reader.Close();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -46,7 +52,6 @@ namespace Utility
                     Console.WriteLine(DateTime.Now.ToString() + " Error: " + ex.ToString());
                 }
             }
-
             return result;
         }
 
