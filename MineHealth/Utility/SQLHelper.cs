@@ -201,7 +201,7 @@ namespace Utility
             {
                 try
                 {
-                    string qry = "SELECT TestDate FROM UserLogTbl WHERE = '" + Phone + "' ";
+                    string qry = "SELECT TestDate FROM UserLogTbl WHERE Phone = '" + Phone + "' ";
                     if (number != 0) qry += "LIMIT " + number.ToString();
                     Console.WriteLine("Query: " + qry);
                     conn.Open();
