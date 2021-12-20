@@ -19,6 +19,39 @@ namespace Utility
         private const string connStr = "Server=" + ServerIP + ";Port=" + Port + ";Database=" + DataBase + ";Uid=" + Uid + ";Pwd=" + Pwd;
 
         /// <summary>
+        /// 유저 정보를 전달
+        /// </summary>
+        /// <param name="Phone"></param>
+        /// <returns></returns>
+        public static string RequestUserInfo(string Phone)
+        {
+            string result = null;
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "SELECT Phone, Nickname, Birth, Gender FROM UserInfoTbl WHERE Phone = '" + Phone + "';";
+                    Console.WriteLine("Query: " + qry);
+
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand(qry, conn);
+                    MySqlDataReader reader = cmd.ExecuteReader();
+
+                    result = reader["Phone"].ToString() + "," + reader["Nickname"].ToString() + "," + reader["Birth"].ToString() + "," +reader["Gender"].ToString();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(DateTime.Now.ToString() + " Error: " + ex.ToString());
+                }
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
         /// 회원가입 요청
         /// </summary>
         /// <param name="Phone"></param>
@@ -63,7 +96,7 @@ namespace Utility
         /// <param name="Nickname"></param>
         /// <param name="Gender"></param>
         /// <returns> 0:success, -1:fail </returns>
-        public static int RequestUpdateUserInfo(string Phone, string Pswd = "", string Birth = "", string Nickname = "", string Gender = "")
+        public static int RequestUpdateUserInfo(string Phone, string Pswd, string Birth, string Nickname, string Gender)
         {
             int result = 0;
             using (MySqlConnection conn = new MySqlConnection(connStr))

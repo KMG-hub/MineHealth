@@ -34,6 +34,13 @@ namespace MineHealth
                     if (strMsg == "exit")  //exit 메시지 수신시 종료하기
                         break;
 
+                    if (strMsg.Contains("USERINFO"))
+                    {
+                        strMsg = strMsg.Replace("USERINFO", "");
+                        strMsg = SQLHelper.RequestUserInfo(strMsg).ToString();
+                    }
+
+
                     if (strMsg.Contains("SIGNIN"))
                     {
                         strMsg = strMsg.Replace("SIGNIN", "");
@@ -41,8 +48,12 @@ namespace MineHealth
                         strMsg = SQLHelper.RequestSignIn(splitStr[0], splitStr[1], splitStr[2], splitStr[3], splitStr[4]).ToString();
                     }
 
-
-
+                    if (strMsg.Contains("UPDATE"))
+                    {
+                        strMsg = strMsg.Replace("UPDATE", "");
+                        var splitStr = strMsg.Split(',');
+                        strMsg = SQLHelper.RequestUpdateUserInfo(splitStr[0], splitStr[1], splitStr[2], splitStr[3], splitStr[4]).ToString();
+                    }
 
                     if (strMsg == "DUPLICATION")
                     {
