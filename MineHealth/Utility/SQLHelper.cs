@@ -23,6 +23,7 @@ namespace Utility
             {
                 try
                 {
+                    conn.Open();
                     string qry = "SELECT COUNT(*) FROM UserInfoTbl Where = '" + Phone + "'";
                     MySqlCommand cmd = new MySqlCommand(qry, conn);
 
@@ -38,7 +39,7 @@ namespace Utility
                 }
             }
 
-            return false;
+            return result;
         }
 
 
