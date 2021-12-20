@@ -6,7 +6,7 @@ namespace MineHealth
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Hello World!! awesomepia! ");
             Console.Read();
         }
     }
