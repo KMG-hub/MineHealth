@@ -2,10 +2,11 @@
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using Utility;
 
 namespace MineHealth
 {
-    class Program
+    class Server
     {
         static void Main(string[] args)
         {
@@ -32,6 +33,12 @@ namespace MineHealth
                     strMsg = sr.ReadLine();
                     if (strMsg == "exit")  //exit 메시지 수신시 종료하기
                         break;
+
+                    if (strMsg == "Duplication")
+                    {
+                        strMsg = SQLHelper.CheckDuplicationPhone("01012345678").ToString();
+                    }
+
 
                     Console.WriteLine(strMsg);
                     sw.WriteLine(strMsg);
