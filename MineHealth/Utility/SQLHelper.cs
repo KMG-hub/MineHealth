@@ -19,7 +19,7 @@ namespace Utility
         private const string connStr = "Server=" + ServerIP + ";Port=" + Port + ";Database=" + DataBase + ";Uid=" + Uid + ";Pwd=" + Pwd;
 
         /// <summary>
-        /// 유저 정보를 전달
+        /// 유저 정보 조회
         /// </summary>
         /// <param name="Phone"></param>
         /// <returns></returns>
