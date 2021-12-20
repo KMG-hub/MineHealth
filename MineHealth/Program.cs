@@ -13,7 +13,7 @@ namespace MineHealth
             {
                 string strMsg;
 
-                TcpListener sockServer = new TcpListener(IPAddress.Parse("127.0.0.1"), 9090); //IP, Port
+                TcpListener sockServer = new TcpListener(IPAddress.Any, 9090); //IP, Port
                 sockServer.Start();
                 Console.WriteLine("Server 시작! Client 연결 대기중...");
 
