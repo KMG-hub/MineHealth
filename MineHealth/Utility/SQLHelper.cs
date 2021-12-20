@@ -9,7 +9,7 @@ namespace Utility
     public static class SQLHelper
     {
 
-        const string ServerIP = "localhostPort";
+        const string ServerIP = "localhost";
         //private const string ServerIP = "211.104.146.87";
         private const string Port = "53383";
         private const string DataBase = "MineHealth";
