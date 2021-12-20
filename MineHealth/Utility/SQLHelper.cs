@@ -26,7 +26,7 @@ namespace Utility
         /// <param name="Birth"></param>
         /// <param name="Nickname"></param>
         /// <param name="Gender"></param>
-        /// <returns>0:success, -1:fail</returns>
+        /// <returns> 0:success, -1:fail </returns>
         public static int RequestSignIn(string Phone, string Pswd, string Birth, string Nickname, string Gender)
         {
             int result = 0;
@@ -35,10 +35,11 @@ namespace Utility
             {
                 try
                 {
-                    conn.Open();
-                    string qry = "INSERT INTO UserInfoTbl(Phone, Pswd, Birth, Nickname, Gender) VALUES ('" 
+                    string qry = "INSERT INTO UserInfoTbl(Phone, Pswd, Birth, Nickname, Gender) VALUES ('"
                         + Phone + "', '" + Pswd + "', '" + Birth + "', '" + Nickname + "', '" + Gender + "');";
+                    Console.WriteLine("Query: " + qry);
 
+                    conn.Open();
                     MySqlCommand cmd = new MySqlCommand(qry, conn);
                     result = cmd.ExecuteNonQuery();
                 }
@@ -52,10 +53,51 @@ namespace Utility
 
             return result;
         }
-        
+
+        /// <summary>
+        /// 회원 정보 수정 요청, 핸드폰번호는 수정 불가.
+        /// </summary>
+        /// <param name="Phone"></param>
+        /// <param name="Pswd"></param>
+        /// <param name="Birth"></param>
+        /// <param name="Nickname"></param>
+        /// <param name="Gender"></param>
+        /// <returns> 0:success, -1:fail </returns>
+        public static int RequestUpdateUserInfo(string Phone, string Pswd = "", string Birth = "", string Nickname = "", string Gender = "")
+        {
+            int result = 0;
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "UPDATE UserInfoTbl SET";
+                    if (!string.IsNullOrEmpty(Pswd)) qry += " Pswd = '" + Pswd + "',";
+                    if (!string.IsNullOrEmpty(Birth)) qry += " Birth = '" + Birth + "', ";
+                    if (!string.IsNullOrEmpty(Nickname)) qry += " Nickname = '" + Nickname + "', ";
+                    if (!string.IsNullOrEmpty(Gender)) qry += " Gender = '" + Gender + "', ";
+                    qry.Substring(qry.Length - 2);
+                    qry += " WHERE Phone = '" + Phone +"'";
+
+                    Console.WriteLine("Query: " + qry);
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand(qry, conn);
+                    result = Convert.ToInt32(cmd.ExecuteScalar());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+            return result;
+        }
 
 
-
+        /// <summary>
+        /// 핸드폰 번호 중복 확인 
+        /// </summary>
+        /// <param name="Phone"></param>
+        /// <returns> 0~:success, -1:fail </returns>
         public static int CheckDuplicationPhone(string Phone)
         {
             int result = 0;

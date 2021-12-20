@@ -34,13 +34,15 @@ namespace MineHealth
                     if (strMsg == "exit")  //exit 메시지 수신시 종료하기
                         break;
 
-
                     if (strMsg.Contains("SIGNIN"))
                     {
                         strMsg = strMsg.Replace("SIGNIN", "");
                         var splitStr = strMsg.Split(',');
                         strMsg = SQLHelper.RequestSignIn(splitStr[0], splitStr[1], splitStr[2], splitStr[3], splitStr[4]).ToString();
                     }
+
+
+
 
                     if (strMsg == "DUPLICATION")
                     {
