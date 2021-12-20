@@ -57,14 +57,18 @@ namespace MineHealth
 
                     if (strMsg.Contains("DUPLICATION"))
                     {
-                        strMsg.Replace("DUPLICATION", "");
+                        strMsg = strMsg.Replace("DUPLICATION", "");
                         strMsg = SQLHelper.CheckDuplicationPhone(strMsg).ToString();
                     }
 
                     if (strMsg.Contains("USERTESTDATE"))
                     {
-                        strMsg.Replace("DUPLICATION", "");
-                        strMsg = SQLHelper.RequestTestDateTime(strMsg).ToString();
+                        strMsg = strMsg.Replace("DUPLICATION", "");
+                        var splitStr = strMsg.Split(',');
+                        if (splitStr.Length > 1)
+                            strMsg = SQLHelper.RequestTestDateTime(splitStr[0], Convert.ToInt32(splitStr[1])).ToString();
+                        else
+                            strMsg = SQLHelper.RequestTestDateTime(splitStr[0]).ToString();
                     }
 
 
