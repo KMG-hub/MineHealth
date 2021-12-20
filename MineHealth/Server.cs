@@ -63,7 +63,7 @@ namespace MineHealth
 
                     if (strMsg.Contains("USERTESTDATE"))
                     {
-                        strMsg = strMsg.Replace("DUPLICATION", "");
+                        strMsg = strMsg.Replace("USERTESTDATE", "");
                         var splitStr = strMsg.Split(',');
                         if (splitStr.Length > 1)
                             strMsg = SQLHelper.RequestTestDateTime(splitStr[0], Convert.ToInt32(splitStr[1])).ToString();
