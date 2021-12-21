@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "MineHealthClient/1.0.0": {
+        "dependencies": {
+          "MineHealthDLL": "1.0.0"
+        },
+        "runtime": {
+          "MineHealthClient.dll": {}
+        }
+      },
+      "MineHealthDLL/1.0.0": {
+        "runtime": {
+          "MineHealthDLL.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MineHealthClient/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MineHealthDLL/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

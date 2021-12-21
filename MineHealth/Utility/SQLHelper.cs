@@ -1,4 +1,7 @@
-﻿using System;
+﻿//#define LocalDB
+#define ExternalDB
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,15 +11,55 @@ namespace Utility
 {
     public static class SQLHelper
     {
-        
-        const string ServerIP = "localhost";
-        //private const string ServerIP = "211.104.146.87";
+#if (LocalDB)
+        private const string ServerIP = "localhost";
         private const string Port = "3306";
-        //private const string Port = "53384";
+#else
+        private const string ServerIP = "211.104.146.87";
+        private const string Port = "53383";
+#endif
         private const string DataBase = "MineHealth";
         private const string Uid = "minehealthsql";
         private const string Pwd = "minehealthsql";
         private const string connStr = "Server=" + ServerIP + ";Port=" + Port + ";Database=" + DataBase + ";Uid=" + Uid + ";Pwd=" + Pwd;
+
+
+
+        public static string RequestUserPswd(string Phone)
+        {
+            string result = null;
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "SELECT Pswd FROM UserInfoTbl WHERE Phone = '" + Phone + "';";
+                    Console.WriteLine("Query: " + qry);
+
+                    conn.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                result = reader["Pswd"].ToString();
+                            }
+                            reader.Close();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(DateTime.Now.ToString() + " Error: " + ex.ToString());
+                }
+            }
+            return result;
+
+        }
+
 
         /// <summary>
         /// 유저 정보 조회
@@ -40,14 +83,18 @@ namespace Utility
                     {
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
-                            reader.Read();
-                            result = reader["Phone"].ToString() + "," + reader["Nickname"].ToString() + "," + reader["Birth"].ToString() + "," + reader["Gender"].ToString();
+                            result = "";
+                            if (reader.Read())
+                            {
+                                result = reader["Phone"].ToString() + "," + reader["Nickname"].ToString() + "," + reader["Birth"].ToString() + "," + reader["Gender"].ToString();
+                            }
                             reader.Close();
                         }
                     }
                 }
                 catch (Exception ex)
                 {
+                    result = null;
                     Console.WriteLine("실패");
                     Console.WriteLine(DateTime.Now.ToString() + " Error: " + ex.ToString());
                 }
