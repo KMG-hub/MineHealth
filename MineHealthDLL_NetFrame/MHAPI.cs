@@ -45,6 +45,8 @@ namespace MineHealthDLL_NetFrame
                 ns = client.GetStream();
                 sr = new StreamReader(ns);
                 sw = new StreamWriter(ns);
+
+                
                 IsConnected = true;
 
                 return sr.ReadLine();
@@ -65,6 +67,7 @@ namespace MineHealthDLL_NetFrame
                 client.Close();
             }
         }
+
         /// <summary>
         /// 로그인 API, GetLogIn(핸드폰번호, 비밀번호)
         /// </summary>
@@ -88,10 +91,10 @@ namespace MineHealthDLL_NetFrame
                     case "OK":
                         result = 0;
                         break;
-                    case "1":
+                    case "Failed, 1":
                         result = 1;
                         break;
-                    case "2":
+                    case "Failed, 2":
                         result = 2;
                         break;
                     default:
@@ -119,7 +122,6 @@ namespace MineHealthDLL_NetFrame
             if (IsConnected)
             {
                 string strRecvMsg = null;
-                //sr.ReadToEnd();
                 sw.WriteLine("SIGNIN" + Phone + "," 
                     + Password + "," 
                     + Birthday + ","
@@ -156,7 +158,7 @@ namespace MineHealthDLL_NetFrame
         }
 
         /// <summary>
-        /// 유저 정보를 조회, USERINFO핸드폰번호
+        /// 유저 정보를 조회 API, USERINFO핸드폰번호
         /// </summary>
         /// <param name="Phone"></param>
         /// <returns>
@@ -193,11 +195,70 @@ namespace MineHealthDLL_NetFrame
             return result;
         }
 
+        /// <summary>
+        /// 번호의 중복여부 체크 API, DUPLICATION해드폰번호
+        /// </summary>
+        /// <param name="Phone"></param>
+        /// <returns>시스템에러:-1, 중복아님:0, 중복:1</returns>
+        public static int GetUserDuplication(string Phone)
+        {
+            int result = -1;
+            if (IsConnected)
+            {
+                string strRecvMsg = null;
+                sw.WriteLine("DUPLICATION" + Phone);
+                sw.Flush();
+                Task.Delay(100);
+                strRecvMsg = sr.ReadLine();
+
+                switch (strRecvMsg)
+                {
+                    case "Failed, -1":
+                        result = -1;
+                        break;
+                    case "0":
+                        result = 0;
+                        break;
+                    default:
+                        result = 1;
+                        break;
+                }
+                sw.Flush();
+            }
+
+            return result;
+        }
+
+
+
+
 
         public enum Gender
         {
             M = 0,
             F = 1
+        }
+
+
+        public static void Command(string cmd)
+        {
+            if (IsConnected)
+            {
+                string strRecvMsg = null;
+                sw.WriteLine(cmd);
+                sw.Flush();
+            }
+        }
+
+        public static string Refresh()
+        {
+            string result = null;
+            if (IsConnected)
+            {
+                result = sr.ReadToEnd();
+            }
+
+            return result;
         }
     }
 }

@@ -95,6 +95,7 @@ namespace MineHealth
                     ClientExit?.Invoke(client, new EventArgs());
                     break;
                 }
+
                 if (strMsg == "shutdown")
                 {
                     ShutDown?.Invoke(client, new EventArgs());
@@ -181,6 +182,7 @@ namespace MineHealth
                         strMsg = "This is Incorrect Information.";
                     }
                 }
+
                 // 등록된 핸드폰번호 중복검사: DUPLICATION[핸드폰번호]
                 if (strMsg.Contains("DUPLICATION"))
                 {

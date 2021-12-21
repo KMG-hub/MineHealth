@@ -96,20 +96,23 @@ namespace MineHealthClientGUI
 
         private void button_send_Click(object sender, RoutedEventArgs e)
         {
-
+            string strtemp = textbox_send.Text;
+            if (string.IsNullOrEmpty(strtemp))
+                return;
+            textbox_message.Text += "<<" + strtemp + Environment.NewLine;
+            textbox_send.Text = string.Empty;
+            MHAPI.Command(strtemp);
         }
 
         private void textbox_send_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if (e.Key == Key.Enter)
+                button_send_Click(null, null);
         }
-    
-    
         private void WriteMessage(string msg)
         {
             textbox_message.Text += ">>" + msg + Environment.NewLine;
         }
-
         private void button_signin_Click(object sender, RoutedEventArgs e)
         {
             var genderTemp = MHAPI.Gender.M;
@@ -131,6 +134,7 @@ namespace MineHealthClientGUI
             if (string.IsNullOrEmpty(tempphone) || string.IsNullOrEmpty(temppassword) || string.IsNullOrEmpty(tempbirth) || string.IsNullOrEmpty(tempnickname))
             {
                 WriteMessage("정보를 올바르게 기입해 주세요.");
+                return;
             }
 
             var result = MHAPI.GetSignIn(tempphone, temppassword, tempbirth, tempnickname, genderTemp);
@@ -155,7 +159,6 @@ namespace MineHealthClientGUI
 
             WriteMessage(msg);
         }
-
         private void button_userinfo_Click(object sender, RoutedEventArgs e)
         {
             var tempphone = textbox_userinfo.Text;
@@ -181,6 +184,18 @@ namespace MineHealthClientGUI
                     break;
             }
             WriteMessage(msg);
+        }
+
+        private void button_refresh_Click(object sender, RoutedEventArgs e)
+        {
+            if (MHAPI.IsConnected)
+            {
+                string strtemp = MHAPI.Refresh();
+                if (string.IsNullOrEmpty(strtemp))
+                {
+                    WriteMessage(strtemp);
+                }
+            }
         }
     }
 }
