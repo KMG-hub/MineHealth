@@ -552,20 +552,20 @@ namespace Utility
                     string qry = "";
                     if (Category == "MINE")
                     {
-                        qry += "SELECT LINK01 FROM CommentTbl RIGHT OUTER JOIN QuestionATbl ON CommentTbl.CommentID = QuestionATbl.CommentID " +
+                        qry = "SELECT LINK01 FROM CommentTbl RIGHT OUTER JOIN QuestionATbl ON CommentTbl.CommentID = QuestionATbl.CommentID " +
                             "WHERE QuestionATbl.TestID = '" + TestId + "' ";
-                        qry += "UNION";
+                        qry += "UNION ";
                         qry += "SELECT LINK01 FROM CommentTbl RIGHT OUTER JOIN QuestionBTbl ON CommentTbl.CommentID = QuestionBTbl.CommentID " +
                             "WHERE QuestionBTbl.TestID = '" + TestId + "' ";
-                        qry += "UNION";
+                        qry += "UNION ";
                         qry += "SELECT LINK01 FROM CommentTbl RIGHT OUTER JOIN QuestionCTbl ON CommentTbl.CommentID = QuestionCTbl.CommentID " +
                             "WHERE QuestionCTbl.TestID = '" + TestId + "' ";
                     }
-                    else
+                    else if (Category == "HEALTH")
                     {
-                        qry += "SELECT LINK01 FROM CommentTbl RIGHT OUTER JOIN PoseATbl ON CommentTbl.CommentID = PoseATbl.CommentID " +
+                        qry = "SELECT LINK01 FROM CommentTbl RIGHT OUTER JOIN PoseATbl ON CommentTbl.CommentID = PoseATbl.CommentID " +
                            "WHERE PoseATbl.TestID = '" + TestId + "' ";
-                        qry += "UNION";
+                        qry += "UNION ";
                         qry += "SELECT LINK01 FROM CommentTbl RIGHT OUTER JOIN PoseBTbl ON CommentTbl.CommentID = PoseBTbl.CommentID " +
                             "WHERE PoseBTbl.TestID = '" + TestId + "' ";
                     }
@@ -579,7 +579,7 @@ namespace Utility
                             result = "";
                             while (reader.Read())
                             {
-                                result = reader[0]?.ToString();
+                                result += reader[0]?.ToString() + ",";
                             }
                         }
                     }
@@ -622,7 +622,7 @@ namespace Utility
                             result = "";
                             while (reader.Read())
                             {
-                                result = reader[0]?.ToString();
+                                result += reader[0]?.ToString() + ",";
                             }
                         }
                     }

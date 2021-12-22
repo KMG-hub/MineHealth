@@ -305,19 +305,23 @@ namespace MineHealth
                         {
                             strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
                         }
-                        var value = SQLHelper.RequestScore(splitStr[0], splitStr[1]);
-                        if (value == null)
-                        {
-                            strMsg = "Failed,-1";
-                        }
-                        else if (value == "")
-                        {
-                            strMsg = "Failed,2";
-                        }
                         else
                         {
-                            strMsg = value;
+                            var value = SQLHelper.RequestScore(splitStr[0], splitStr[1]);
+                            if (value == null)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (value == "")
+                            {
+                                strMsg = "Failed,2";
+                            }
+                            else
+                            {
+                                strMsg = value;
+                            }
                         }
+                       
                     }
                     else
                     {
@@ -337,19 +341,23 @@ namespace MineHealth
                         {
                             strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
                         }
-                        var value = SQLHelper.RequestLevel(splitStr[0], splitStr[1]);
-                        if (value == null)
-                        {
-                            strMsg = "Failed,-1";
-                        }
-                        else if (value == "")
-                        {
-                            strMsg = "Failed,2";
-                        }
                         else
                         {
-                            strMsg = value;
+                            var value = SQLHelper.RequestLevel(splitStr[0], splitStr[1]);
+                            if (value == null)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (value == "")
+                            {
+                                strMsg = "Failed,2";
+                            }
+                            else
+                            {
+                                strMsg = value;
+                            }
                         }
+                       
                     }
                     else
                     {
@@ -369,19 +377,23 @@ namespace MineHealth
                         {
                             strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
                         }
-                        var value = SQLHelper.RequestComment(splitStr[0], splitStr[1]);
-                        if (value == null)
-                        {
-                            strMsg = "Failed,-1";
-                        }
-                        else if (value == "")
-                        {
-                            strMsg = "Failed,2";
-                        }
                         else
                         {
-                            strMsg = value;
+                            var value = SQLHelper.RequestComment(splitStr[0], splitStr[1]);
+                            if (value == null)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (value == "")
+                            {
+                                strMsg = "Failed,2";
+                            }
+                            else
+                            {
+                                strMsg = value;
+                            }
                         }
+                        
                     }
                     else
                     {
@@ -391,12 +403,75 @@ namespace MineHealth
 
                 // 유저 추천 링크 조회, USERLINK [카테고리],[TESTID]
                 else if (strMsg.Contains("USERLINK "))
-                { 
-                    
+                {
+                    strMsg = strMsg.Replace("USERLINK ", "");
+                    var splitStr = strMsg.Split(',');
+
+                    if (splitStr.Length == 2)
+                    {
+                        if (new List<string> { "MINE", "HEALTH" }.Contains(splitStr[0]) == false)
+                        {
+                            strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
+                        }
+                        else
+                        {
+                            var value = SQLHelper.RequestPersonalLink(splitStr[0], splitStr[1]);
+                            if (value == null)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (value == "")
+                            {
+                                strMsg = "Failed,2";
+                            }
+                            else
+                            {
+                                strMsg = value;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
+                    }
 
                 }
 
+                // 전체 링크 조회, ALLLINK [카테고리]
+                else if (strMsg.Contains("ALLLINK "))
+                {
+                    strMsg = strMsg.Replace("ALLLINK ", "");
+                    var splitStr = strMsg.Split(',');
 
+                    if (splitStr.Length == 1)
+                    {
+                        if (new List<string> { "MINE", "HEALTH" }.Contains(splitStr[0]) == false)
+                        {
+                            strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
+                        }
+                        else
+                        {
+                            var value = SQLHelper.RequestAllLink(splitStr[0]);
+                            if (value == null)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (value == "")
+                            {
+                                strMsg = "Failed,2";
+                            }
+                            else
+                            {
+                                strMsg = value;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
+                    }
+
+                }
                 SendMessage(strMsg);
                 sw.WriteLine(strMsg);
                 sw.Flush();
