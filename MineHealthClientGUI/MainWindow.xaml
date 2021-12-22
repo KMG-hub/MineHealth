@@ -11,7 +11,8 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel x:Name="stackpanel_sidebar" Background="#272727">
+        <ScrollViewer>
+        <StackPanel x:Name="stackpanel_sidebar" Background="#272727" Height="auto" CanVerticallyScroll="True">
             <Button x:Name="button_connect" Width="80" Height="20" Margin="5"
                     Click="button_connect_Click" >연결</Button>
             <Separator/>
@@ -34,13 +35,32 @@
             <TextBox x:Name="textbox_signingender" Width="80" Height="20"></TextBox>
             <Button x:Name="button_signin" Width="80" Height="20" Margin="5"
                     Click="button_signin_Click" >회원가입</Button>
+            <Separator/>
             <TextBlock Foreground="#EAEAEA" FontWeight="Bold" TextAlignment="Center">Phone</TextBlock>
             <TextBox x:Name="textbox_userinfo" Width="80" Height="20"></TextBox>
             <Button x:Name="button_userinfo" Width="80" Height="20" Margin="5"
                     Click="button_userinfo_Click" >유저조회</Button>
             <Separator/>
-        </StackPanel>
+            <TextBlock Foreground="#EAEAEA" FontWeight="Bold" TextAlignment="Center">Phone</TextBlock>
+            <TextBox x:Name="textbox_usertestdate" Width="80" Height="20"></TextBox>
+            <Button x:Name="button_usertestdate" Width="80" Height="20" Margin="5"
+                    Click="button_usertestdate_Click" >테스트일정</Button>
 
+            <Separator/>
+                <TextBlock Foreground="#EAEAEA" FontWeight="Bold" TextAlignment="Center">Phone</TextBlock>
+                <TextBox x:Name="textbox_qscorephone" Width="80" Height="20"></TextBox>
+                <TextBlock Foreground="#EAEAEA" FontWeight="Bold" TextAlignment="Center">Testdate</TextBlock>
+                <TextBox x:Name="textbox_qscoretestdate" Width="80" Height="20"></TextBox>
+                <Button x:Name="button_userqascore" Width="80" Height="20" Margin="5"
+                    Click="button_userqascore_Click" >질문A점수</Button>
+            
+                <Button x:Name="button_userqbscore" Width="80" Height="20" Margin="5"
+                    Click="button_userqbscore_Click" >질문B점수</Button>
+                <Button x:Name="button_userqcscore" Width="80" Height="20" Margin="5"
+                    Click="button_userqcscore_Click" >질문C점수</Button>
+
+            </StackPanel>
+        </ScrollViewer>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -58,7 +78,6 @@
                 
                 </TextBox>
                 <Button x:Name="button_send" Click="button_send_Click" Margin="2 0" Width="60">전송</Button>
-                <Button x:Name="button_refresh" Click="button_refresh_Click" Margin="2 0" Width="60">새로고침</Button>
             </StackPanel>
             
         </Grid>

@@ -101,7 +101,7 @@ namespace MineHealthClientGUI
                 return;
             textbox_message.Text += "<<" + strtemp + Environment.NewLine;
             textbox_send.Text = string.Empty;
-            MHAPI.Command(strtemp);
+            WriteMessage(MHAPI.Command(strtemp).ToString());
         }
 
         private void textbox_send_KeyDown(object sender, KeyEventArgs e)
@@ -186,15 +186,110 @@ namespace MineHealthClientGUI
             WriteMessage(msg);
         }
 
-        private void button_refresh_Click(object sender, RoutedEventArgs e)
+        private void button_usertestdate_Click(object sender, RoutedEventArgs e)
         {
-            if (MHAPI.IsConnected)
+            var tempphone = textbox_usertestdate.Text;
+
+            if (string.IsNullOrEmpty(tempphone))
             {
-                string strtemp = MHAPI.Refresh();
-                if (string.IsNullOrEmpty(strtemp))
+                WriteMessage("정보를 올바르게 기입해 주세요.");
+                return;
+            }
+
+            var result = MHAPI.GetUserTestDate(tempphone);
+            string msg = "";
+
+            if (result == null)
+            {
+                WriteMessage("시스템 오류");
+            }
+            else
+            {
+                for (int i = 0; i < result.Length; i++)
                 {
-                    WriteMessage(strtemp);
+                    WriteMessage(result[i]);
                 }
+            }
+        }
+
+        private void button_userqascore_Click(object sender, RoutedEventArgs e)
+        {
+            var tempphone = textbox_qscorephone.Text;
+            var temptestdate = textbox_qscoretestdate.Text;
+            if (string.IsNullOrEmpty(tempphone) || string.IsNullOrEmpty(temptestdate))
+            {
+                WriteMessage("정보를 올바르게 기입해 주세요.");
+                return;
+            }
+
+            var result = MHAPI.GetUserFirstQScore(tempphone, temptestdate);
+            string msg = "";
+
+            if (result == -1)
+            {
+                WriteMessage("시스템 오류");
+            }
+            else if (result == -2)
+            {
+                WriteMessage("데이터가 없습니다.");
+            }
+            else
+            {
+                WriteMessage("질문A 점수: " + result.ToString());
+            }
+        }
+
+        private void button_userqbscore_Click(object sender, RoutedEventArgs e)
+        {
+            var tempphone = textbox_qscorephone.Text;
+            var temptestdate = textbox_qscoretestdate.Text;
+            if (string.IsNullOrEmpty(tempphone) || string.IsNullOrEmpty(temptestdate))
+            {
+                WriteMessage("정보를 올바르게 기입해 주세요.");
+                return;
+            }
+
+            var result = MHAPI.GetUserSecondQScore(tempphone, temptestdate);
+            string msg = "";
+
+            if (result == -1)
+            {
+                WriteMessage("시스템 오류");
+            }
+            else if (result == -2)
+            {
+                WriteMessage("데이터 없습니다.");
+            }
+            else
+            {
+                WriteMessage("질문B 점수: " + result.ToString());
+            }
+        }
+
+        private void button_userqcscore_Click(object sender, RoutedEventArgs e)
+        {
+            var tempphone = textbox_qscorephone.Text;
+            var temptestdate = textbox_qscoretestdate.Text;
+            if (string.IsNullOrEmpty(tempphone) || string.IsNullOrEmpty(temptestdate))
+            {
+                WriteMessage("정보를 올바르게 기입해 주세요.");
+                return;
+            }
+
+            var result = MHAPI.GetUserThirdQScore(tempphone, temptestdate);
+            string msg = "";
+
+            if (result == -1)
+            {
+                WriteMessage("시스템 오류");
+            }
+            else if (result == -2)
+            {
+                WriteMessage("데이터가 없습니다.");
+            }
+            else
+            {
+                WriteMessage("질문C 점수: " + result.ToString());
             }
         }
     }

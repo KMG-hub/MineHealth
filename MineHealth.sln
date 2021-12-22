@@ -7,11 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MineHealth", "MineHealth\Mi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MineHealthClient", "MineHealthClient\MineHealthClient.csproj", "{F67C7C90-E676-4FDC-998C-81CCC09178C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MineHealthDLL", "MineHealthDLL\MineHealthDLL.csproj", "{CF2D6D30-510A-48FE-BA53-531B6B74C4BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MineHealthDLL", "MineHealthDLL\MineHealthDLL.csproj", "{CF2D6D30-510A-48FE-BA53-531B6B74C4BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MineHealthClientGUI", "MineHealthClientGUI\MineHealthClientGUI.csproj", "{8EA2FB63-B65E-4388-98C6-4A4A0D824D03}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MineHealthDLL_NetFrame", "MineHealthDLL_NetFrame\MineHealthDLL_NetFrame.csproj", "{114A9BF9-0021-4134-AE7C-51F1721AB247}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{722F7D55-6954-4472-AFD6-8089F8004109}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\bming\Documents\카카오톡 받은 파일\ai실증과제 어플리케이션(MineHealth) 기획서_ver0.1.pdf = C:\Users\bming\Documents\카카오톡 받은 파일\ai실증과제 어플리케이션(MineHealth) 기획서_ver0.1.pdf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
