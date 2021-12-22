@@ -1,5 +1,5 @@
-﻿//#define LocalDB
-#define ExternalDB
+﻿#define LocalDB
+//#define ExternalDB
 
 using System;
 using System.Collections.Generic;
