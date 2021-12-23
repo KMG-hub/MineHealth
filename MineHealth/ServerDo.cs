@@ -36,459 +36,466 @@ namespace MineHealth
             string welcome = "Server Connnect Success!";
             sw.WriteLine(welcome);
             sw.Flush();
-            while (true)
+            try
             {
-                strMsg = sr.ReadLine();
-                if (strMsg == null)
+                while (true)
                 {
-                    strMsg = string.Empty;
-                }
-                Console.WriteLine("ME: {0}", strMsg);
-                if (strMsg == "exit")  //exit 메시지 수신시 종료하기
-                {
-                    ClientExit?.Invoke(client, EventArgs.Empty);
-                    break;
-                }
-
-             
-                // 로그인 여부, LOGIN [핸드폰번호],[비밀번호]
-                if (strMsg.Contains("LOGIN "))
-                {
-                    strMsg = strMsg.Replace("LOGIN ", "");
-                    var splitStr = strMsg.Split(',');
-
-                    if (splitStr.Length == 2)
+                    strMsg = sr.ReadLine();
+                    if (strMsg == null)
                     {
-                        var tempPhone = splitStr[0];
-                        var tempPassword = splitStr[1];
-                        var value = SQLHelper.RequestUserPswd(tempPhone);
-
-                        if (string.IsNullOrWhiteSpace(value))
-                        {
-                            strMsg = "Failed,1";    // 실패, 등록되지 않은 핸드폰번호
-                        }
-                        else if (tempPassword == value)
-                        {
-                            strMsg = "LOGIN OK";    // 성공
-                        }
-                        else
-                        {
-                            strMsg = "Failed,2";    // 실패, 비밀번호가 다름.
-                        }
+                        strMsg = string.Empty;
                     }
-                    else
+                    Console.WriteLine("ME: {0}", strMsg);
+                    if (strMsg == "exit")  //exit 메시지 수신시 종료하기
                     {
-                        strMsg = "Failed,3";        // 실패, 핸드폰번호,비밀번호가 모두 입력되지 않음.
+                        ClientExit?.Invoke(client, EventArgs.Empty);
+                        break;
                     }
-                }
 
-                // 회원가입, SIGNIN [핸드폰번호],[비밀번호],[생년월일],[닉네임],[성별]
-                else if (strMsg.Contains("SIGNIN "))
-                {
-                    strMsg = strMsg.Replace("SIGNIN ", "");
-                    var splitStr = strMsg.Split(',');
-                    if (SQLHelper.CheckDuplicationPhone(splitStr[0]) > 0)
+                    // 로그인 여부, LOGIN [핸드폰번호],[비밀번호]
+                    if (strMsg.Contains("LOGIN "))
                     {
-                        strMsg = "Failed,1";   // 실패, 이미 등록된 핸드폰번호
-                    }
-                    else if (splitStr.Length == 5)
-                    {
-                        var temp = SQLHelper.RequestSignIn(splitStr[0], splitStr[1], splitStr[2], splitStr[3], splitStr[4]);
-                        if (temp != -1)
+                        strMsg = strMsg.Replace("LOGIN ", "");
+                        var splitStr = strMsg.Split(',');
+
+                        if (splitStr.Length == 2)
                         {
-                            strMsg = "SIGNIN OK";
+                            var tempPhone = splitStr[0];
+                            var tempPassword = splitStr[1];
+                            var value = SQLHelper.RequestUserPswd(tempPhone);
+
+                            if (string.IsNullOrWhiteSpace(value))
+                            {
+                                strMsg = "Failed,1";    // 실패, 등록되지 않은 핸드폰번호
+                            }
+                            else if (tempPassword == value)
+                            {
+                                strMsg = "LOGIN OK";    // 성공
+                            }
+                            else
+                            {
+                                strMsg = "Failed,2";    // 실패, 비밀번호가 다름.
+                            }
                         }
                         else
                         {
-                            strMsg = "Failed,-1";
+                            strMsg = "Failed,3";        // 실패, 핸드폰번호,비밀번호가 모두 입력되지 않음.
                         }
                     }
-                    else
-                    {
-                        strMsg = "Failed, 3";
-                    }
-                }
 
-                // 중복체크, DUPLICATION [핸드폰번호]
-                else if (strMsg.Contains("DUPLICATION "))
-                {
-                    strMsg = strMsg.Replace("DUPLICATION ", "");
-                    var value = SQLHelper.CheckDuplicationPhone(strMsg);
-
-
-                    if (string.IsNullOrEmpty(strMsg))
+                    // 회원가입, SIGNIN [핸드폰번호],[비밀번호],[생년월일],[닉네임],[성별]
+                    else if (strMsg.Contains("SIGNIN "))
                     {
-                        strMsg = "Failed,1";    // 올바르지않은 핸드폰번호 입력
-                    }
-
-                    if (value == 0)
-                    {
-                        strMsg = "NOT Duplicate";   // 중복 아님
-                    }
-                    else if (value == -1)
-                    {
-                        strMsg = "Failed,-1";
-                    }
-                    else
-                    {
-                        strMsg = "Duplicate";       // 중복
-                    }
-                }
-
-                // 비밀번호변경, CHANGEPWD [핸드폰번호],[비밀번호],[새로운비밀번호]
-                else if (strMsg.Contains("CHANGEPWD "))
-                {
-                    strMsg = strMsg.Replace("CHANGEPWD ", "");
-                    var splitStr = strMsg.Split(',');
-                    if (SQLHelper.CheckDuplicationPhone(splitStr[0]) == 0)
-                    {
-                        strMsg = "Failed,1";   // 실패, 등록되지 않은 핸드폰번호
-                    }
-                    else if (splitStr.Length == 3)
-                    {
-                        if (splitStr[1] != SQLHelper.RequestUserPswd(splitStr[0]))
-                        {
-                            strMsg = "Failed,2";
-                        }
-                        else if (splitStr[1] == splitStr[2])
+                        strMsg = strMsg.Replace("SIGNIN ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (string.IsNullOrEmpty(splitStr[0]) || string.IsNullOrEmpty(splitStr[1]) || string.IsNullOrEmpty(splitStr[2]) || string.IsNullOrEmpty(splitStr[3]) || string.IsNullOrEmpty(splitStr[4]))
                         {
                             strMsg = "Failed,3";
                         }
-                        else
+                        else if (SQLHelper.CheckDuplicationPhone(splitStr[0]) > 0)
                         {
-                            if (SQLHelper.RequestChangePassword(splitStr[0], splitStr[1], splitStr[2]) == -1)
+                            strMsg = "Failed,1";   // 실패, 이미 등록된 핸드폰번호
+                        }
+                        else if (splitStr.Length == 5)
+                        {
+                            var temp = SQLHelper.RequestSignIn(splitStr[0], splitStr[1], splitStr[2], splitStr[3], splitStr[4]);
+                            if (temp != -1)
                             {
-                                strMsg = "Failed,-1";
+                                strMsg = "SIGNIN OK";
                             }
                             else
                             {
-                                strMsg = "CHANGEPWD OK";
+                                strMsg = "Failed,-1";
                             }
-                        }
-                    }
-                    else
-                    {
-                        strMsg = "Failed,4";
-                    }
-                }
-
-                // 유저정보수정, UPDATEUSERINFO [핸드폰번호],[비밀번호],[생년월일],[닉네임],[성별]
-                else if (strMsg.Contains("USERINFOUPDATE "))
-                {
-                    strMsg = strMsg.Replace("USERINFOUPDATE ", "");
-                    var splitStr = strMsg.Split(',');
-                    if (SQLHelper.CheckDuplicationPhone(splitStr[0]) == 0)
-                    {
-                        strMsg = "Failed,1";   // 실패, 등록되지 않은 핸드폰번호
-                    }
-                    else if (splitStr.Length == 5)
-                    {
-                        if (splitStr[1] != SQLHelper.RequestUserPswd(splitStr[0]))
-                        {
-                            strMsg = "Failed,2";
                         }
                         else
                         {
-                            var value = SQLHelper.RequestUpdateUserInfo(splitStr[0], splitStr[1], splitStr[2], splitStr[3], splitStr[4]);
-                            if (value == -1)
-                            {
-                                strMsg = "Failed,-1";
-                            }
-                            else
-                            {
-                                strMsg = "UPDATEUSERINFO OK";
-                            }
+                            strMsg = "Failed, 3";
                         }
                     }
-                    else
-                    {
-                        strMsg = "Failed,3";
-                    }
-                }
 
-                // 유저정보조회, USERINFO [핸드폰번호],[비밀번호]
-                else if (strMsg.Contains("USERINFO "))
-                {
-                    strMsg = strMsg.Replace("USERINFO ", "");
-                    var splitStr = strMsg.Split(',');
-                    if (SQLHelper.CheckDuplicationPhone(splitStr[0]) == 0)
+                    // 중복체크, DUPLICATION [핸드폰번호]
+                    else if (strMsg.Contains("DUPLICATION "))
                     {
-                        strMsg = "Failed,1";   // 실패, 등록되지 않은 핸드폰번호
-                    }
-                    else if (splitStr.Length == 2)
-                    {
-                        if (splitStr[1] != SQLHelper.RequestUserPswd(splitStr[0]))
-                        {
-                            strMsg = "Failed,2";
-                        }
-                        else
-                        {
-                            var value = SQLHelper.RequestUserInfo(splitStr[0], splitStr[1]);
-                            if (value == null)
-                            {
-                                strMsg = "Failed,-1";
-                            }
-                            else
-                            {
-                                strMsg = value;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        strMsg = "Failed,3";
-                    }
-                }
+                        strMsg = strMsg.Replace("DUPLICATION ", "");
+                        var value = SQLHelper.CheckDuplicationPhone(strMsg);
 
-                // 유저검사일조회, USERTESTDATE [핸드폰번호],[비밀번호]
-                else if (strMsg.Contains("USERTESTDATE "))
-                {
-                    strMsg = strMsg.Replace("USERTESTDATE ", "");
-                    var splitStr = strMsg.Split(',');
-                    if (SQLHelper.CheckDuplicationPhone(splitStr[0]) == 0)
-                    {
-                        strMsg = "Failed,1";   // 실패, 등록되지 않은 핸드폰번호
-                    }
-                    else if (splitStr.Length == 2)
-                    {
-                        var value = SQLHelper.RequestTestDateTime(splitStr[0], splitStr[1]);
-                        
-                        if (value == null)
+                        if (string.IsNullOrEmpty(strMsg))
+                        {
+                            strMsg = "Failed,1";    // 올바르지않은 핸드폰번호 입력
+                        }
+                        if (value == 0)
+                        {
+                            strMsg = "NOT Duplicate";   // 중복 아님
+                        }
+                        else if (value == -1)
                         {
                             strMsg = "Failed,-1";
                         }
                         else
                         {
-                            strMsg = value;
+                            strMsg = "Duplicate";       // 중복
                         }
                     }
-                    else
-                    {
-                        strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
-                    }
-                }
 
-                // 유저TESTID조회, USERTESTID [핸드폰번호],[검사일]
-                else if (strMsg.Contains("USERTESTID "))
-                {
-                    strMsg = strMsg.Replace("USERTESTID ", "");
-                    var splitStr = strMsg.Split(',');
-                    if (SQLHelper.CheckDuplicationPhone(splitStr[0]) == 0)
+                    // 비밀번호변경, CHANGEPWD [핸드폰번호],[비밀번호],[새로운비밀번호]
+                    else if (strMsg.Contains("CHANGEPWD "))
                     {
-                        strMsg = "Failed,1";   // 실패, 등록되지 않은 핸드폰번호
-                    }
-                    else if (splitStr.Length == 2)
-                    {
-                        var value = SQLHelper.RequestTestId(splitStr[0], splitStr[1]);
-                        if (value == null)
+                        strMsg = strMsg.Replace("CHANGEPWD ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (SQLHelper.CheckDuplicationPhone(splitStr[0]) == 0)
                         {
-                            strMsg = "Failed,-1";
+                            strMsg = "Failed,1";   // 실패, 등록되지 않은 핸드폰번호
                         }
-                        else if (value == "")
+                        else if (splitStr.Length == 3)
                         {
-                            strMsg = "Failed,2";
+                            if (splitStr[1] != SQLHelper.RequestUserPswd(splitStr[0]))
+                            {
+                                strMsg = "Failed,2";
+                            }
+                            else if (splitStr[1] == splitStr[2])
+                            {
+                                strMsg = "Failed,3";
+                            }
+                            else
+                            {
+                                if (SQLHelper.RequestChangePassword(splitStr[0], splitStr[1], splitStr[2]) == -1)
+                                {
+                                    strMsg = "Failed,-1";
+                                }
+                                else
+                                {
+                                    strMsg = "CHANGEPWD OK";
+                                }
+                            }
                         }
                         else
                         {
-                            strMsg = value;
+                            strMsg = "Failed,4";
                         }
                     }
-                    else
-                    {
-                        strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
-                    }
-                }
 
-                // 유저 점수 조회, USERSCORE [카테고리],[TESTID]
-                else if (strMsg.Contains("USERSCORE "))
-                {
-                    strMsg = strMsg.Replace("USERSCORE ", "");
-                    var splitStr = strMsg.Split(',');
-                   
-                    if (splitStr.Length == 2)
+                    // 유저정보수정, UPDATEUSERINFO [핸드폰번호],[비밀번호],[생년월일],[닉네임],[성별]
+                    else if (strMsg.Contains("USERINFOUPDATE "))
                     {
-                        if (new List<string> { "QA", "QB", "QC", "PA", "PB" }.Contains(splitStr[0]) == false)
+                        strMsg = strMsg.Replace("USERINFOUPDATE ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (SQLHelper.CheckDuplicationPhone(splitStr[0]) == 0)
                         {
-                            strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
+                            strMsg = "Failed,1";   // 실패, 등록되지 않은 핸드폰번호
+                        }
+                        else if (splitStr.Length == 5)
+                        {
+                            if (splitStr[1] != SQLHelper.RequestUserPswd(splitStr[0]))
+                            {
+                                strMsg = "Failed,2";    // 실패, 일치하지 않는 비밀번호
+                            }
+                            else
+                            {
+                                var value = SQLHelper.RequestUpdateUserInfo(splitStr[0], splitStr[1], splitStr[2], splitStr[3], splitStr[4]);
+                                if (value == -1)
+                                {
+                                    strMsg = "Failed,-1";
+                                }
+                                else
+                                {
+                                    strMsg = "UPDATEUSERINFO OK";
+                                }
+                            }
                         }
                         else
                         {
-                            var value = SQLHelper.RequestScore(splitStr[0], splitStr[1]);
+                            strMsg = "Failed,3";
+                        }
+                    }
+
+                    // 유저정보조회, USERINFO [핸드폰번호],[비밀번호]
+                    else if (strMsg.Contains("USERINFO "))
+                    {
+                        strMsg = strMsg.Replace("USERINFO ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (SQLHelper.CheckDuplicationPhone(splitStr[0]) == 0)
+                        {
+                            strMsg = "Failed,1";   // 실패, 등록되지 않은 핸드폰번호
+                        }
+                        else if (splitStr.Length == 2)
+                        {
+                            if (splitStr[1] != SQLHelper.RequestUserPswd(splitStr[0]))
+                            {
+                                strMsg = "Failed,2";
+                            }
+                            else
+                            {
+                                var value = SQLHelper.RequestUserInfo(splitStr[0], splitStr[1]);
+                                if (value == null)
+                                {
+                                    strMsg = "Failed,-1";
+                                }
+                                else if (value == string.Empty)
+                                {
+                                    strMsg = "Failed,3";
+                                }
+                                else
+                                {
+                                    strMsg = value;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            strMsg = "Failed,4";
+                        }
+                    }
+
+                    // 유저검사일조회, USERTESTDATE [핸드폰번호],[조회개수]
+                    else if (strMsg.Contains("USERTESTDATE "))
+                    {
+                        strMsg = strMsg.Replace("USERTESTDATE ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (SQLHelper.CheckDuplicationPhone(splitStr[0]) == 0)
+                        {
+                            strMsg = "Failed,1";   // 실패, 등록되지 않은 핸드폰번호
+                        }
+                        else if (splitStr.Length == 2)
+                        {
+                            var value = SQLHelper.RequestTestDateTime(splitStr[0], splitStr[1]);
+
                             if (value == null)
                             {
                                 strMsg = "Failed,-1";
-                            }
-                            else if (value == "")
-                            {
-                                strMsg = "Failed,2";
                             }
                             else
                             {
                                 strMsg = value;
                             }
                         }
-                       
-                    }
-                    else
-                    {
-                        strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
-                    }
-                }
-
-                // 유저 점수 조회, USERLEVEL [카테고리],[TESTID]
-                else if (strMsg.Contains("USERLEVEL "))
-                {
-                    strMsg = strMsg.Replace("USERLEVEL ", "");
-                    var splitStr = strMsg.Split(',');
-
-                    if (splitStr.Length == 2)
-                    {
-                        if (new List<string> { "QA", "QB", "QC", "PA", "PB" }.Contains(splitStr[0]) == false)
-                        {
-                            strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
-                        }
                         else
                         {
-                            var value = SQLHelper.RequestLevel(splitStr[0], splitStr[1]);
+                            strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
+                        }
+                    }
+
+                    // 유저TESTID조회, USERTESTID [핸드폰번호],[검사일]
+                    else if (strMsg.Contains("USERTESTID "))
+                    {
+                        strMsg = strMsg.Replace("USERTESTID ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (SQLHelper.CheckDuplicationPhone(splitStr[0]) == 0)
+                        {
+                            strMsg = "Failed,1";   // 실패, 등록되지 않은 핸드폰번호
+                        }
+                        else if (splitStr.Length == 2)
+                        {
+                            var value = SQLHelper.RequestTestId(splitStr[0], splitStr[1]);
                             if (value == null)
                             {
                                 strMsg = "Failed,-1";
                             }
                             else if (value == "")
                             {
-                                strMsg = "Failed,2";
+                                strMsg = "Failed,2";    // 데이터가 존재하지 않음.
                             }
                             else
                             {
                                 strMsg = value;
                             }
-                        }
-                       
-                    }
-                    else
-                    {
-                        strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
-                    }
-                }
-
-                // 유저 코멘트 조회, USERCOMMENT [카테고리],[TESTID]
-                else if (strMsg.Contains("USERCOMMENT "))
-                {
-                    strMsg = strMsg.Replace("USERCOMMENT ", "");
-                    var splitStr = strMsg.Split(',');
-
-                    if (splitStr.Length == 2)
-                    {
-                        if (new List<string> { "MINE", "QB", "QC", "PA", "PB" }.Contains(splitStr[0]) == false)
-                        {
-                            strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
                         }
                         else
                         {
-                            var value = SQLHelper.RequestComment(splitStr[0], splitStr[1]);
-                            if (value == null)
+                            strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
+                        }
+                    }
+
+                    // 유저 점수 조회, USERSCORE [카테고리],[TESTID]
+                    else if (strMsg.Contains("USERSCORE "))
+                    {
+                        strMsg = strMsg.Replace("USERSCORE ", "");
+                        var splitStr = strMsg.Split(',');
+
+                        if (splitStr.Length == 2)
+                        {
+                            if (new List<string> { "QA", "QB", "QC", "PA", "PB" }.Contains(splitStr[0]) == false)
                             {
-                                strMsg = "Failed,-1";
-                            }
-                            else if (value == "")
-                            {
-                                strMsg = "Failed,2";
+                                strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
                             }
                             else
                             {
-                                strMsg = value;
+                                var value = SQLHelper.RequestScore(splitStr[0], splitStr[1]);
+                                if (value == null)
+                                {
+                                    strMsg = "Failed,-1";
+                                }
+                                else if (value == "")
+                                {
+                                    strMsg = "Failed,2";
+                                }
+                                else
+                                {
+                                    strMsg = value;
+                                }
                             }
-                        }
-                        
-                    }
-                    else
-                    {
-                        strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
-                    }
-                }
-
-                // 유저 추천 링크 조회, USERLINK [카테고리],[TESTID]
-                else if (strMsg.Contains("USERLINK "))
-                {
-                    strMsg = strMsg.Replace("USERLINK ", "");
-                    var splitStr = strMsg.Split(',');
-
-                    if (splitStr.Length == 2)
-                    {
-                        if (new List<string> { "MINE", "HEALTH" }.Contains(splitStr[0]) == false)
-                        {
-                            strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
                         }
                         else
                         {
-                            var value = SQLHelper.RequestPersonalLink(splitStr[0], splitStr[1]);
-                            if (value == null)
+                            strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
+                        }
+                    }
+
+                    // 유저 점수 조회, USERLEVEL [카테고리],[TESTID]
+                    else if (strMsg.Contains("USERLEVEL "))
+                    {
+                        strMsg = strMsg.Replace("USERLEVEL ", "");
+                        var splitStr = strMsg.Split(',');
+
+                        if (splitStr.Length == 2)
+                        {
+                            if (new List<string> { "QA", "QB", "QC", "PA", "PB" }.Contains(splitStr[0]) == false)
                             {
-                                strMsg = "Failed,-1";
-                            }
-                            else if (value == "")
-                            {
-                                strMsg = "Failed,2";
+                                strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
                             }
                             else
                             {
-                                strMsg = value;
+                                var value = SQLHelper.RequestLevel(splitStr[0], splitStr[1]);
+                                if (value == null)
+                                {
+                                    strMsg = "Failed,-1";
+                                }
+                                else if (value == "")
+                                {
+                                    strMsg = "Failed,2";
+                                }
+                                else
+                                {
+                                    strMsg = value;
+                                }
                             }
-                        }
-                    }
-                    else
-                    {
-                        strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
-                    }
-
-                }
-
-                // 전체 링크 조회, ALLLINK [카테고리]
-                else if (strMsg.Contains("ALLLINK "))
-                {
-                    strMsg = strMsg.Replace("ALLLINK ", "");
-                    var splitStr = strMsg.Split(',');
-
-                    if (splitStr.Length == 1)
-                    {
-                        if (new List<string> { "MINE", "HEALTH" }.Contains(splitStr[0]) == false)
-                        {
-                            strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
                         }
                         else
                         {
-                            var value = SQLHelper.RequestAllLink(splitStr[0]);
-                            if (value == null)
+                            strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
+                        }
+                    }
+
+                    // 유저 코멘트 조회, USERCOMMENT [카테고리],[TESTID]
+                    else if (strMsg.Contains("USERCOMMENT "))
+                    {
+                        strMsg = strMsg.Replace("USERCOMMENT ", "");
+                        var splitStr = strMsg.Split(',');
+
+                        if (splitStr.Length == 2)
+                        {
+                            if (new List<string> { "QA", "QB", "QC", "PA", "PB" }.Contains(splitStr[0]) == false)
                             {
-                                strMsg = "Failed,-1";
-                            }
-                            else if (value == "")
-                            {
-                                strMsg = "Failed,2";
+                                strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
                             }
                             else
                             {
-                                strMsg = value;
+                                var value = SQLHelper.RequestComment(splitStr[0], splitStr[1]);
+                                if (value == null)
+                                {
+                                    strMsg = "Failed,-1";
+                                }
+                                else if (value == "")
+                                {
+                                    strMsg = "Failed,2";
+                                }
+                                else
+                                {
+                                    strMsg = value;
+                                }
                             }
+
+                        }
+                        else
+                        {
+                            strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
                         }
                     }
-                    else
+
+                    // 유저 추천 링크 조회, USERLINK [카테고리],[TESTID]
+                    else if (strMsg.Contains("USERLINK "))
                     {
-                        strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
+                        strMsg = strMsg.Replace("USERLINK ", "");
+                        var splitStr = strMsg.Split(',');
+
+                        if (splitStr.Length == 2)
+                        {
+                            if (new List<string> { "MINE", "HEALTH" }.Contains(splitStr[0]) == false)
+                            {
+                                strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
+                            }
+                            else
+                            {
+                                var value = SQLHelper.RequestPersonalLink(splitStr[0], splitStr[1]);
+                                if (value == null)
+                                {
+                                    strMsg = "Failed,-1";
+                                }
+                                else if (value == "")
+                                {
+                                    strMsg = "Failed,2";
+                                }
+                                else
+                                {
+                                    strMsg = value;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
+                        }
+
                     }
 
+                    // 전체 링크 조회, ALLLINK [카테고리]
+                    else if (strMsg.Contains("ALLLINK "))
+                    {
+                        strMsg = strMsg.Replace("ALLLINK ", "");
+                        var splitStr = strMsg.Split(',');
+
+                        if (splitStr.Length == 1)
+                        {
+                            if (new List<string> { "MINE", "HEALTH" }.Contains(splitStr[0]) == false)
+                            {
+                                strMsg = "Failed,1";   // 실패, 등록되지 않은 카테고리
+                            }
+                            else
+                            {
+                                var value = SQLHelper.RequestAllLink(splitStr[0]);
+                                if (value == null)
+                                {
+                                    strMsg = "Failed,-1";
+                                }
+                                else if (value == "")
+                                {
+                                    strMsg = "Failed,2";
+                                }
+                                else
+                                {
+                                    strMsg = value;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
+                        }
+
+                    }
+                    SendMessage(strMsg);
+                    sw.WriteLine(strMsg);
+                    sw.Flush();
                 }
-                SendMessage(strMsg);
-                sw.WriteLine(strMsg);
-                sw.Flush();
+                sw.Close();
+                sr.Close();
+                ns.Close();
             }
-
-            sw.Close();
-            sr.Close();
-            ns.Close();
-
-           
-            
+            catch (Exception ex)
+            {
+                SendMessage(ex.Message);
+                ClientExit?.Invoke(client, EventArgs.Empty);
+            }
             SendMessage("Client 연결 종료!");
         }
         /* private void Running()

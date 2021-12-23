@@ -88,7 +88,7 @@ namespace Utility
                             result = "";
                             if (reader.Read())
                             {
-                                result = reader["Phone"].ToString() + "," + reader["Nickname"].ToString() + "," + reader["Birth"].ToString() + "," + reader["Gender"].ToString();
+                                result = reader["Phone"].ToString() + "," + reader["Birth"].ToString() + "," + reader["Nickname"].ToString() + "," + reader["Gender"].ToString();
                             }
                             reader.Close();
                         }
