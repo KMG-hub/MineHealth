@@ -39,6 +39,10 @@ namespace MineHealth
             while (true)
             {
                 strMsg = sr.ReadLine();
+                if (strMsg == null)
+                {
+                    strMsg = string.Empty;
+                }
                 Console.WriteLine("ME: {0}", strMsg);
                 if (strMsg == "exit")  //exit 메시지 수신시 종료하기
                 {
@@ -46,6 +50,7 @@ namespace MineHealth
                     break;
                 }
 
+             
                 // 로그인 여부, LOGIN [핸드폰번호],[비밀번호]
                 if (strMsg.Contains("LOGIN "))
                 {
@@ -246,7 +251,8 @@ namespace MineHealth
                     }
                     else if (splitStr.Length == 2)
                     {
-                        var value = SQLHelper.RequestTestDateTime(splitStr[0], Convert.ToInt32(splitStr[1]));
+                        var value = SQLHelper.RequestTestDateTime(splitStr[0], splitStr[1]);
+                        
                         if (value == null)
                         {
                             strMsg = "Failed,-1";

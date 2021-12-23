@@ -1,5 +1,5 @@
-﻿#define LocalDB
-//#define ExternalDB
+﻿//#define LocalDB
+#define ExternalDB
 
 using System;
 using System.Collections.Generic;
@@ -284,15 +284,18 @@ namespace Utility
         /// <param name="Phone"></param>
         /// <param name="number"></param>
         /// <returns></returns>
-        public static string RequestTestDateTime(string Phone, int number = 0)
+        public static string RequestTestDateTime(string Phone, string number = "0")
         {
             string result = null;
             using (MySqlConnection conn = new MySqlConnection(connStr))
             {
+                
                 try
                 {
+                    int tempnum = 0;
+                    int.TryParse(number, out tempnum);
                     string qry = "SELECT TestDate FROM UserLogTbl WHERE Phone = '" + Phone + "' ORDER BY TestDate DESC ";
-                    if (number != 0) qry += "LIMIT " + number.ToString();
+                    if (tempnum != 0) qry += "LIMIT " + tempnum.ToString();
                     Console.WriteLine("Query: " + qry);
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(qry, conn))
