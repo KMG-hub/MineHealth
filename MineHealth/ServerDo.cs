@@ -647,7 +647,7 @@ namespace MineHealth
 
         public void SendMessage(string msg)
         {
-            Console.WriteLine("client#{0}: {1}", clientNo, msg);
+            Console.WriteLine("client#{0}: {1}      {2}", clientNo, msg, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff"));
         }
     }
 }
