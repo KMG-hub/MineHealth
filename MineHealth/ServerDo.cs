@@ -483,6 +483,7 @@ namespace MineHealth
                         }
 
                     }
+
                     SendMessage(strMsg);
                     sw.WriteLine(strMsg);
                     sw.Flush();
