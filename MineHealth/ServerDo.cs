@@ -341,7 +341,7 @@ namespace MineHealth
                         }
                     }
 
-                    // 유저 점수 조회, USERLEVEL [카테고리],[TESTID]
+                    // 유저 레벨 조회, USERLEVEL [카테고리],[TESTID]
                     else if (strMsg.Contains("USERLEVEL "))
                     {
                         strMsg = strMsg.Replace("USERLEVEL ", "");
@@ -482,6 +482,212 @@ namespace MineHealth
                             strMsg = "Failed,3";   // 실패, 모든 정보가 입력되지 않음.
                         }
 
+                    }
+
+                    // 유저 테스트 기록 입력, USERLOGINPUT [핸드폰번호],[검사일],[테스트장소]
+                    else if (strMsg.Contains("USERLOGINPUT "))
+                    {
+                        strMsg = strMsg.Replace("USERLOGINPUT ", "");
+                        var splitStr = strMsg.Split(',');
+
+                        if (splitStr.Length == 3)
+                        {
+                            var value = SQLHelper.InsertUserLog(splitStr[0], splitStr[1], splitStr[2]);
+                            if (value == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (value == 1)
+                            {
+                                var testIDValue = SQLHelper.RequestTestId(splitStr[0], splitStr[1]);
+                                if (testIDValue == null)
+                                {
+                                    strMsg = "Failed,-1";
+                                }
+                                else if (testIDValue == "")
+                                {
+                                    strMsg = "Failed,3";    // 데이터가 존재하지 않음.
+                                }
+                                else
+                                {
+                                    strMsg = testIDValue;
+                                }
+                            }
+                            else if (value == 0)
+                            {
+                                strMsg = "Failed,1";    // 데이터가 입력되지 않음.
+                            }
+                        }
+                        else
+                        {
+                            strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
+                        }
+
+                    }
+
+                    // 질문A 테스트 기록 입력, QAINSERT [TESTID],[Answer0~9],[Score]
+                    else if (strMsg.Contains("QAINSERT "))
+                    {
+                        strMsg = strMsg.Replace("QAINSERT ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (splitStr.Length == 12)
+                        {
+                            List<string> list = new List<string>();
+                            for (int i = 0; i < 10; i++)
+                            {
+                                list.Add(splitStr[i + 1]);
+                            }
+                            var tempResult = SQLHelper.InsertQuestion("QA", splitStr[0], list, splitStr[11]);
+
+                            if (tempResult == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (tempResult == 0)
+                            {
+                                strMsg = "Failed,1";
+                            }
+                            else if (tempResult == 1)
+                            {
+                                strMsg = "QAINSERT OK";
+                            }
+                        }
+                        else
+                        {
+                            strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
+                        }
+                    }
+
+                    // 질문B 테스트 기록 입력, QBINSERT [TESTID],[Answer0~6],[Score]
+                    else if (strMsg.Contains("QBINSERT "))
+                    {
+                        strMsg = strMsg.Replace("QBINSERT ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (splitStr.Length == 12)
+                        {
+                            List<string> list = new List<string>();
+                            for (int i = 0; i < 10; i++)
+                            {
+                                list.Add(splitStr[i + 1]);
+                            }
+                            var tempResult = SQLHelper.InsertQuestion("QB", splitStr[0], list, splitStr[11]);
+
+                            if (tempResult == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (tempResult == 0)
+                            {
+                                strMsg = "Failed,1";
+                            }
+                            else if (tempResult == 1)
+                            {
+                                strMsg = "QBINSERT OK";
+                            }
+                        }
+                        else
+                        {
+                            strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
+                        }
+                    }
+
+                    // 질문C 테스트 기록 입력, QCINSERT [TESTID],[Answer0~9],[Score]
+                    else if (strMsg.Contains("QCINSERT "))
+                    {
+                        strMsg = strMsg.Replace("QCINSERT ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (splitStr.Length == 12)
+                        {
+                            List<string> list = new List<string>();
+                            for (int i = 0; i < 10; i++)
+                            {
+                                list.Add(splitStr[i + 1]);
+                            }
+                            var tempResult = SQLHelper.InsertQuestion("QC", splitStr[0], list, splitStr[11]);
+
+                            if (tempResult == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (tempResult == 0)
+                            {
+                                strMsg = "Failed,1";
+                            }
+                            else if (tempResult == 1)
+                            {
+                                strMsg = "QCINSERT OK";
+                            }
+                        }
+                        else
+                        {
+                            strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
+                        }
+                    }
+
+                    // 자세A 테스트 기록 입력, PAINSERT [TESTID],[POINT0~31],[SCORE]
+                    else if (strMsg.Contains("PAINSERT "))
+                    {
+                        strMsg = strMsg.Replace("PAINSERT ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (splitStr.Length == 66)
+                        {
+                            List<string> list = new List<string>();
+                            for (int i = 0; i < 64; i=i+2)
+                            {
+                                list.Add(splitStr[i + 1] + "," +splitStr[i + 2]);
+                            }
+                            var tempResult = SQLHelper.InsertPose("PA", splitStr[0], list, splitStr[65]);
+
+                            if (tempResult == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (tempResult == 0)
+                            {
+                                strMsg = "Failed,1";
+                            }
+                            else if (tempResult == 1)
+                            {
+                                strMsg = "PAINSERT OK";
+                            }
+                        }
+                        else
+                        {
+                            strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
+                        }
+                    }
+
+                    // 자세B 테스트 기록 입력, PBINSERT [TESTID],[POINT0~31],[SCORE]
+                    else if (strMsg.Contains("PBINSERT "))
+                    {
+                        strMsg = strMsg.Replace("PBINSERT ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (splitStr.Length == 66)
+                        {
+                            List<string> list = new List<string>();
+                            for (int i = 0; i < 64; i = i + 2)
+                            {
+                                list.Add(splitStr[i + 1] + "," + splitStr[i + 2]);
+                            }
+                            var tempResult = SQLHelper.InsertPose("PB", splitStr[0], list, splitStr[65]);
+
+                            if (tempResult == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (tempResult == 0)
+                            {
+                                strMsg = "Failed,1";
+                            }
+                            else if (tempResult == 1)
+                            {
+                                strMsg = "PBINSERT OK";
+                            }
+                        }
+                        else
+                        {
+                            strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
+                        }
                     }
 
                     SendMessage(strMsg);

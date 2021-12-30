@@ -1,5 +1,5 @@
-﻿//#define LocalDB
-#define ExternalDB
+﻿#define LocalDB
+//#define ExternalDB
 
 using System;
 using System.Collections.Generic;
@@ -162,7 +162,7 @@ namespace Utility
                     if (!string.IsNullOrEmpty(Birth)) qry += " Birth = '" + Birth + "', ";
                     if (!string.IsNullOrEmpty(Nickname)) qry += " Nickname = '" + Nickname + "', ";
                     if (!string.IsNullOrEmpty(Gender)) qry += " Gender = '" + Gender + "'";
-                    qry += " WHERE Phone = '" + Phone +"' AND Pswd = '" + Pswd + "';";
+                    qry += " WHERE Phone = '" + Phone + "' AND Pswd = '" + Pswd + "';";
 
                     Console.WriteLine("Query: " + qry);
                     conn.Open();
@@ -243,7 +243,7 @@ namespace Utility
 
             return result;
         }
-        
+
         /// <summary>
         /// 유저 정보 삭제
         /// </summary>
@@ -289,7 +289,7 @@ namespace Utility
             string result = null;
             using (MySqlConnection conn = new MySqlConnection(connStr))
             {
-                
+
                 try
                 {
                     int tempnum = 0;
@@ -376,7 +376,7 @@ namespace Utility
                 try
                 {
                     string strtemp = "";
-                    switch(Category)
+                    switch (Category)
                     {
                         case "QA":
                             strtemp = "QuestionATbl";
@@ -545,6 +545,12 @@ namespace Utility
             return result;
         }
 
+        /// <summary>
+        /// 유저별 맞춤 유튜브 링크 조회, RequestPersonalLink(테스트항목, TestId)
+        /// </summary>
+        /// <param name="Category"></param>
+        /// <param name="TestId"></param>
+        /// <returns></returns>
         public static string RequestPersonalLink(string Category, string TestId)
         {
             string result = null;
@@ -598,6 +604,13 @@ namespace Utility
             return result;
         }
 
+
+        /// <summary>
+        /// 항목별 모든 유튜브 링크 조회, RequestAllLink(테스트항목)
+        /// </summary>
+        /// <param name="Category"></param>
+        /// <param name="TestId"></param>
+        /// <returns></returns>
         public static string RequestAllLink(string Category)
         {
 
@@ -641,5 +654,146 @@ namespace Utility
             return result;
 
         }
+        public static int InsertUserLog(string Phone, string TestDate, string TestLocation)
+        {
+            int result = -1;
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "INSERT INTO UserLogTbl (Phone, TestDate, Location)" +
+                        "VALUES ('" + Phone + "', '" + TestDate + "', '" + TestLocation + "');";
+                    Console.WriteLine("Query: " + qry);
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        result = cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                    return -1;
+                }
+            }
+            return result;
+        }
+        public static int InsertQuestion(string Category, string TestId, List<string> Answer, string Score)
+        {
+            int result = -1;
+
+            string tableName = "";
+            switch(Category)
+            {
+                case "QA":
+                    tableName = "QuestionATbl";
+                    break;
+                    
+                case "QB":
+                    tableName = "QuestionBTbl";
+                    break;
+
+                case "QC":
+                    tableName = "QuestionCTbl";
+                    break;
+
+                default:
+                    return -1;
+            }
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "INSERT INTO " + tableName
+                        + " (TestID, Score";
+
+
+                    for (int i = 0; i < Answer.Count; i++)
+                    {
+                        qry += ", " + "Answer" + i.ToString();
+                    }
+
+                    qry += ") VALUES ('" + TestId + "', '" + Score + "'";
+                    foreach (var item in Answer)
+                    {
+                        qry += ", '" + item;
+                    }
+
+                    qry += ");";
+
+                    Console.WriteLine("Query: " + qry);
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        result = cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                    return -1;
+                }
+            }
+
+
+            return result;
+        }
+
+        public static int InsertPose(string Category, string TestId, List<string> Answer, string Score)
+        {
+            int result = -1;
+
+            string tableName = "";
+            switch (Category)
+            {
+                case "PA":
+                    tableName = "PoseATbl";
+                    break;
+
+                case "PB":
+                    tableName = "PoseBTbl";
+                    break;
+                default:
+                    return -1;
+            }   
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "INSERT INTO " + tableName;
+                    qry += " VALUES (0,'" + TestId + "','" + Score + "','','','";
+                    foreach (var item in Answer)
+                    {
+                        
+                        qry += "','" + item.Replace(" ", "");
+                    }
+
+                    qry += "',CURRENT_TIMESTAMP());";
+
+                    Console.WriteLine("Query: " + qry);
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        result = cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                    return -1;
+                }
+            }
+
+
+            return result;
+        }
+
     }
 }
+
+//PAINSERT 29706ffc-67bc-11ec-a9a5-6c0b84653419,<123,456>, <123,457>, <123,458>, <123,459>, <123,460>, <123,461>, <123,462>, <123,463>, <123,464>, <123,465>, <123,466>, <123,467>, <123,468>, <123,469>, <123,470>, <123,471>, <123,472>, <123,473>, <123,474>, <123,475>, <123,476>, <123,477>, <123,478>, <123,479>, <123,480>, <123,481>, <123,482>, <123,483>, <123,484>, <123,485>, <123,486>, <123,487>,10
