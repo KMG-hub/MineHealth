@@ -712,13 +712,13 @@ namespace Utility
 
                     for (int i = 0; i < Answer.Count; i++)
                     {
-                        qry += ", " + "Answer" + i.ToString();
+                        qry += "," + "Answer" + i.ToString();
                     }
 
                     qry += ") VALUES ('" + TestId + "', '" + Score + "'";
                     foreach (var item in Answer)
                     {
-                        qry += ", '" + item;
+                        qry += "','" + item;
                     }
 
                     qry += ");";

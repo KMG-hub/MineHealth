@@ -28,8 +28,8 @@ try
 
 
                 //TcpClient sockClient = new TcpClient("211.104.146.87", 9090); //소켓생성,커넥트
-                //TcpClient sockClient = new TcpClient("minehealth.awesomeserver.kr", 9090); //소켓생성,커넥트
-                TcpClient sockClient = new TcpClient("127.0.0.1", 9090); //소켓생성,커넥트
+                TcpClient sockClient = new TcpClient("minehealth.awesomeserver.kr", 9090); //소켓생성,커넥트
+                //TcpClient sockClient = new TcpClient("127.0.0.1", 9090); //소켓생성,커넥트
 
                 NetworkStream ns = sockClient.GetStream();
                 StreamReader sr = new StreamReader(ns);
