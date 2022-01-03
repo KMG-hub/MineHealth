@@ -715,7 +715,7 @@ namespace Utility
                         qry += "," + "Answer" + i.ToString();
                     }
 
-                    qry += ") VALUES ('" + TestId + "', '" + Score + "'";
+                    qry += ") VALUES ('" + TestId + "', '" + Score + "";
                     foreach (var item in Answer)
                     {
                         qry += "','" + item;
