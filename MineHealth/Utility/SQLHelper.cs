@@ -721,7 +721,7 @@ namespace Utility
                         qry += "','" + item;
                     }
 
-                    qry += ");";
+                    qry += "');";
 
                     Console.WriteLine("Query: " + qry);
                     conn.Open();
