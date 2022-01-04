@@ -563,14 +563,14 @@ namespace MineHealth
                     {
                         strMsg = strMsg.Replace("QBINSERT ", "");
                         var splitStr = strMsg.Split(',');
-                        if (splitStr.Length == 12)
+                        if (splitStr.Length == 9)
                         {
                             List<string> list = new List<string>();
                             for (int i = 0; i < 7; i++)
                             {
                                 list.Add(splitStr[i + 1]);
                             }
-                            var tempResult = SQLHelper.InsertQuestion("QB", splitStr[0], list, splitStr[11]);
+                            var tempResult = SQLHelper.InsertQuestion("QB", splitStr[0], list, splitStr[8]);
 
                             if (tempResult == -1)
                             {
