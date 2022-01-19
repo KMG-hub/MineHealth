@@ -755,7 +755,6 @@ namespace Utility
 
             return result;
         }
-
         public static int InsertPose(string Category, string TestId, List<string> Answer, string Score)
         {
             int result = -1;
@@ -819,8 +818,6 @@ namespace Utility
 
             return result;
         }
-
-
         public static int UpdateQuestion(string Category, string TestId, List<string> Answer, string Score)
         {
             int result = -1;
@@ -870,8 +867,42 @@ namespace Utility
                         qry += "Answer" + i.ToString();
                         qry += " = '" + Answer[i] + "', ";
                     }
+                    qry += "Score" + " = '" + Score + "', ";
 
-                    qry += "Score" + " = '" + Score + "' ";
+                    string level = "";
+                    string CommentID = "";
+
+                    switch (Category)
+                    {
+                        case "QA":
+                            if (Convert.ToDouble(Score) <= 2)
+                                level = "A";
+                            else
+                                level = "B";
+                            break;
+                        case "QB":
+                            if (Convert.ToDouble(Score) <= 4)
+                                level = "A";
+                            else
+                                level = "B";
+                            break;
+                        case "QC":
+                            if (Convert.ToDouble(Score) <= 10)
+                                level = "A";
+                            else if (Convert.ToDouble(Score) <= 20)
+                                level = "B";
+                            else if (Convert.ToDouble(Score) <= 30)
+                                level = "C";
+                            else if (Convert.ToDouble(Score) <= 40)
+                                level = "D";
+                            break;
+                    }
+
+                    CommentID = Category + "-" + level;
+
+                    qry += "Level" + " = '" + level + "', ";
+                    qry += "CommentID" + " = '" + CommentID + "' ";
+
                     qry += "WHERE TestID = '" + TestId + "';";
                     Console.WriteLine("Query: " + qry);
                     conn.Open();
