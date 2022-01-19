@@ -1,5 +1,5 @@
-﻿#define LocalDB
-//#define ExternalDB
+﻿//#define LocalDB
+#define ExternalDB
 
 using System;
 using System.Collections.Generic;
@@ -688,14 +688,28 @@ namespace Utility
             {
                 case "QA":
                     tableName = "QuestionATbl";
+                    if (Answer is null)
+                        Answer = new List<string>()
+                        {
+                            "","","","","","","","","",""
+                        };
                     break;
                     
                 case "QB":
                     tableName = "QuestionBTbl";
+                    if (Answer is null)
+                        Answer = new List<string>()
+                        {
+                            "","","","","","",""
+                        };
                     break;
 
                 case "QC":
                     tableName = "QuestionCTbl";
+                    Answer = new List<string>()
+                        {
+                            "","","","","","","","","",""
+                        };
                     break;
 
                 default:
@@ -708,8 +722,8 @@ namespace Utility
                 {
                     string qry = "INSERT INTO " + tableName
                         + " (TestID, Score";
-
-
+                    
+                    
                     for (int i = 0; i < Answer.Count; i++)
                     {
                         qry += "," + "Answer" + i.ToString();
@@ -746,6 +760,7 @@ namespace Utility
         {
             int result = -1;
 
+
             string tableName = "";
             switch (Category)
             {
@@ -758,7 +773,19 @@ namespace Utility
                     break;
                 default:
                     return -1;
-            }   
+            }
+
+
+            if (Answer is null)
+            {
+                Answer = new List<string>()
+                {
+                    "<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>",
+                    "<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>",
+                    "<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>",
+                    "<0,0>","<0,0>"
+                };
+            }
 
             using (MySqlConnection conn = new MySqlConnection(connStr))
             {
@@ -793,6 +820,138 @@ namespace Utility
             return result;
         }
 
+
+        public static int UpdateQuestion(string Category, string TestId, List<string> Answer, string Score)
+        {
+            int result = -1;
+
+            string tableName = "";
+            switch (Category)
+            {
+                case "QA":
+                    tableName = "QuestionATbl";
+                    if (Answer is null)
+                        Answer = new List<string>()
+                        {
+                            "","","","","","","","","",""
+                        };
+                    break;
+
+                case "QB":
+                    tableName = "QuestionBTbl";
+                    if (Answer is null)
+                        Answer = new List<string>()
+                        {
+                            "","","","","","",""
+                        };
+                    break;
+
+                case "QC":
+                    tableName = "QuestionCTbl";
+                    Answer = new List<string>()
+                        {
+                            "","","","","","","","","",""
+                        };
+                    break;
+
+                default:
+                    return -1;
+            }
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "UPDATE " + tableName + " SET ";
+
+                    for (int i = 0; i < Answer.Count; i++)
+                    {
+                        qry += "Answer" + i.ToString();
+                        qry += " = '" + Answer[i] + "', ";
+                    }
+
+                    qry += "Score" + " = '" + Score + "' ";
+                    qry += "WHERE TestID = " + TestId + ";";
+
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        result = cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                    return -1;
+                }
+            }
+
+
+            return result;
+        }
+
+        public static int UpdatePose(string Category, string TestId, List<string> Answer, string Score)
+        {
+            int result = -1;
+
+
+            string tableName = "";
+            switch (Category)
+            {
+                case "PA":
+                    tableName = "PoseATbl";
+                    break;
+
+                case "PB":
+                    tableName = "PoseBTbl";
+                    break;
+                default:
+                    return -1;
+            }
+
+            List<string> jointsname = new List<string>()
+            {
+                 "PELVIS", "SPINE_NAVAL", "SPINE_CHEST", "NECK",
+                    "CLAVICLE_LEFT", "SHOULDER_LEFT", "ELBOW_LEFT", "WRIST_LEFT", "HAND_LEFT", "HANDTIP_LEFT", "THUMB_LEFT",
+                    "CLAVICLE_RIGHT", "SHOULDER_RIGHT", "ELBOW_RIGHT", "WRIST_RIGHT", "HAND_RIGHT", "HANDTIP_RIGHT", "THUMB_RIGHT",
+                    "HIP_LEFT", "KNEE_LEFT", "ANKLE_LEFT", "FOOT_LEFT",
+                    "HIP_RIGHT", "KNEE_RIGHT", "ANKLE_RIGHT", "FOOT_RIGHT",
+                    "HEAD", "NOSE", "EYE_LEFT", "EAR_LEFT", "EYE_RIGHT", "EAR_RIGHT"
+            };
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "UPDATE " + tableName + " SET ";
+
+                    for (int i = 0; i < jointsname.Count; i++)
+                    {    
+                        qry += jointsname[i] + " = '" + Answer[i] +"', ";
+                    }
+
+                    qry += "Score = '" + Score + "' ";
+                    qry += "WHERE TestID = " + TestId;
+
+                    Console.WriteLine("Query: " + qry);
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        result = cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                    return -1;
+                }
+            }
+
+
+            return result;
+        }
     }
 }
 

@@ -500,6 +500,13 @@ namespace MineHealth
                             else if (value == 1)
                             {
                                 var testIDValue = SQLHelper.RequestTestId(splitStr[0], splitStr[1]);
+
+                                SQLHelper.InsertQuestion("QA", testIDValue, null, "0");
+                                SQLHelper.InsertQuestion("QB", testIDValue, null, "0");
+                                SQLHelper.InsertQuestion("QC", testIDValue, null, "0");
+                                SQLHelper.InsertPose("PA", testIDValue, null, "0");
+                                SQLHelper.InsertPose("PB", testIDValue, null, "0");
+
                                 if (testIDValue == null)
                                 {
                                     strMsg = "Failed,-1";

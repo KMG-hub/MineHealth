@@ -9,7 +9,6 @@ namespace MineHealth
 {
     class Server
     {
-
         static int clientCount = 0;
         static TcpClient client = null;
 
