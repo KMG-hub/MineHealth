@@ -848,7 +848,8 @@ namespace Utility
 
                 case "QC":
                     tableName = "QuestionCTbl";
-                    Answer = new List<string>()
+                    if (Answer is null)
+                        Answer = new List<string>()
                         {
                             "","","","","","","","","",""
                         };
