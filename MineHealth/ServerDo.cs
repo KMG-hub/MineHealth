@@ -544,7 +544,7 @@ namespace MineHealth
                             {
                                 list.Add(splitStr[i + 1]);
                             }
-                            var tempResult = SQLHelper.InsertQuestion("QA", splitStr[0], list, splitStr[11]);
+                            var tempResult = SQLHelper.UpdateQuestion("QA", splitStr[0], list, splitStr[11]);
 
                             if (tempResult == -1)
                             {
@@ -577,7 +577,7 @@ namespace MineHealth
                             {
                                 list.Add(splitStr[i + 1]);
                             }
-                            var tempResult = SQLHelper.InsertQuestion("QB", splitStr[0], list, splitStr[8]);
+                            var tempResult = SQLHelper.UpdateQuestion("QB", splitStr[0], list, splitStr[8]);
 
                             if (tempResult == -1)
                             {
@@ -610,7 +610,7 @@ namespace MineHealth
                             {
                                 list.Add(splitStr[i + 1]);
                             }
-                            var tempResult = SQLHelper.InsertQuestion("QC", splitStr[0], list, splitStr[11]);
+                            var tempResult = SQLHelper.UpdateQuestion("QC", splitStr[0], list, splitStr[11]);
 
                             if (tempResult == -1)
                             {
@@ -643,7 +643,7 @@ namespace MineHealth
                             {
                                 list.Add(splitStr[i + 1] + "," +splitStr[i + 2]);
                             }
-                            var tempResult = SQLHelper.InsertPose("PA", splitStr[0], list, splitStr[65]);
+                            var tempResult = SQLHelper.UpdatePose("PA", splitStr[0], list, splitStr[65]);
 
                             if (tempResult == -1)
                             {
@@ -676,7 +676,7 @@ namespace MineHealth
                             {
                                 list.Add(splitStr[i + 1] + "," + splitStr[i + 2]);
                             }
-                            var tempResult = SQLHelper.InsertPose("PB", splitStr[0], list, splitStr[65]);
+                            var tempResult = SQLHelper.UpdatePose("PB", splitStr[0], list, splitStr[65]);
 
                             if (tempResult == -1)
                             {
