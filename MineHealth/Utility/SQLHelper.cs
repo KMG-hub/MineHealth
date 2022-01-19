@@ -872,7 +872,7 @@ namespace Utility
 
                     qry += "Score" + " = '" + Score + "' ";
                     qry += "WHERE TestID = " + TestId + ";";
-
+                    Console.WriteLine("Query: " + qry);
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(qry, conn))
                     {
