@@ -21,10 +21,10 @@ namespace MineHealth
                 while (IsServer)
                 {
                     sockServer.Start();
-                    Console.WriteLine("Server 시작! Client 연결 대기중...");
+                    WriteLine("Server 시작! Client 연결 대기중...");
 
                     client = sockServer.AcceptTcpClient();//Accept
-                    Console.WriteLine("Client#{0} 접속성공!", ++clientCount);
+                    WriteLine(string.Format("Client#{0} 접속성공!", ++clientCount));
 
                     Thread thread = new Thread(initServerDo);
                     thread.Start();
@@ -34,7 +34,7 @@ namespace MineHealth
             }
             catch (SocketException e)
             {
-                Console.WriteLine(e.ToString());
+                WriteLine(e.ToString());
             }
 
 
@@ -50,6 +50,11 @@ namespace MineHealth
         private static void ServerDo_ClientExit(object sender, EventArgs e)
         {
             clientCount--;
+        }
+
+        private static void WriteLine(string msg)
+        {
+            Console.WriteLine("{0}, {1}", msg, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff"));
         }
     }
 

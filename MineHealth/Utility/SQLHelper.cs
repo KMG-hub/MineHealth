@@ -77,6 +77,7 @@ namespace Utility
                 try
                 {
                     string qry = "SELECT Phone, Nickname, Birth, Gender FROM UserInfoTbl WHERE Phone = '" + Phone + "' AND Pswd = '" + Pswd + "';";
+
                     Console.WriteLine("Query: " + qry);
 
                     conn.Open();
