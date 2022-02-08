@@ -45,6 +45,10 @@ namespace MineHealth
                     {
                         strMsg = string.Empty;
                     }
+
+                    if (string.IsNullOrEmpty(strMsg))
+                        continue;
+
                     Console.WriteLine("ME: {0}", strMsg);
                     if (strMsg == "exit")  //exit 메시지 수신시 종료하기
                     {
