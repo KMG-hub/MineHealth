@@ -1043,7 +1043,7 @@ namespace Utility
         }
 
 
-        public static int UpdatePose(string Category, string TestId, List<string> Answer, string Score)
+        public static int UpdatePose(string Category, string TestId, List<string> Answer, string path, string Score)
         {
             int result = -1;
 
@@ -1084,6 +1084,7 @@ namespace Utility
                     }
 
                     qry += "Score = '" + Score + "' ";
+                    qry += "SavePath = '" + path + "' ";
                     qry += "WHERE TestID = '" + TestId + "'";
 
                     Console.WriteLine("Query: " + qry);

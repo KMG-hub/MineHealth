@@ -645,14 +645,14 @@ namespace MineHealth
                     {
                         strMsg = strMsg.Replace("PAINSERT ", "");
                         var splitStr = strMsg.Split(',');
-                        if (splitStr.Length == 66)
+                        if (splitStr.Length == 67)
                         {
                             List<string> list = new List<string>();
                             for (int i = 0; i < 64; i=i+2)
                             {
                                 list.Add(splitStr[i + 1] + "," +splitStr[i + 2]);
                             }
-                            var tempResult = SQLHelper.UpdatePose("PA", splitStr[0], list, splitStr[65]);
+                            var tempResult = SQLHelper.UpdatePose("PA", splitStr[0], list, splitStr[65], splitStr[66]);
 
                             if (tempResult == -1)
                             {
@@ -678,14 +678,14 @@ namespace MineHealth
                     {
                         strMsg = strMsg.Replace("PBINSERT ", "");
                         var splitStr = strMsg.Split(',');
-                        if (splitStr.Length == 66)
+                        if (splitStr.Length == 67)
                         {
                             List<string> list = new List<string>();
                             for (int i = 0; i < 64; i = i + 2)
                             {
                                 list.Add(splitStr[i + 1] + "," + splitStr[i + 2]);
                             }
-                            var tempResult = SQLHelper.UpdatePose("PB", splitStr[0], list, splitStr[65]);
+                            var tempResult = SQLHelper.UpdatePose("PB", splitStr[0], list, splitStr[65], splitStr[66]);
 
                             if (tempResult == -1)
                             {
