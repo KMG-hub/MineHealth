@@ -1084,7 +1084,7 @@ namespace Utility
                     }
 
                     qry += "Score = '" + Score + "', ";
-                    qry += "SavePath = '" + path + "' ";
+                    qry += "SavePath = " + path + " ";
                     qry += "WHERE TestID = '" + TestId + "'";
 
                     Console.WriteLine("Query: " + qry);
