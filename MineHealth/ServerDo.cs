@@ -508,6 +508,11 @@ namespace MineHealth
                                 SQLHelper.InsertQuestion("QA", testIDValue, null, "0");
                                 SQLHelper.InsertQuestion("QB", testIDValue, null, "0");
                                 SQLHelper.InsertQuestion("QC", testIDValue, null, "0");
+                                SQLHelper.InsertEmotion("EA", testIDValue, "");
+                                SQLHelper.InsertEmotion("EB", testIDValue, "");
+                                SQLHelper.InsertEmotion("EC", testIDValue, "");
+                                SQLHelper.InsertEmotion("ED", testIDValue, "");
+
                                 SQLHelper.InsertPose("PA", testIDValue, null, "0");
                                 SQLHelper.InsertPose("PB", testIDValue, null, "0");
 
@@ -700,6 +705,103 @@ namespace MineHealth
                             strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
                         }
                     }
+
+                    else if (strMsg.Contains("EAINSERT "))
+                    {
+                        strMsg = strMsg.Replace("EAINSERT ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (splitStr.Length == 2)
+                        {
+                            var tempResult = SQLHelper.UpdateEmotion("EA", splitStr[0], splitStr[1]);
+
+                            if (tempResult == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (tempResult == 0)
+                            {
+                                strMsg = "Failed,1";
+                            }
+                            else if (tempResult == 1)
+                            {
+                                strMsg = "EAINSERT OK";
+                            }
+                        }
+
+                    }
+
+                    else if (strMsg.Contains("EBINSERT "))
+                    {
+                        strMsg = strMsg.Replace("EBINSERT ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (splitStr.Length == 2)
+                        {
+                            var tempResult = SQLHelper.UpdateEmotion("EB", splitStr[0], splitStr[1]);
+
+                            if (tempResult == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (tempResult == 0)
+                            {
+                                strMsg = "Failed,1";
+                            }
+                            else if (tempResult == 1)
+                            {
+                                strMsg = "EBINSERT OK";
+                            }
+                        }
+
+                    }
+
+                    else if (strMsg.Contains("ECINSERT "))
+                    {
+                        strMsg = strMsg.Replace("ECINSERT ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (splitStr.Length == 2)
+                        {
+                            var tempResult = SQLHelper.UpdateEmotion("EC", splitStr[0], splitStr[1]);
+
+                            if (tempResult == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (tempResult == 0)
+                            {
+                                strMsg = "Failed,1";
+                            }
+                            else if (tempResult == 1)
+                            {
+                                strMsg = "ECINSERT OK";
+                            }
+                        }
+
+                    }
+
+                    else if (strMsg.Contains("EDINSERT "))
+                    {
+                        strMsg = strMsg.Replace("EDINSERT ", "");
+                        var splitStr = strMsg.Split(',');
+                        if (splitStr.Length == 2)
+                        {
+                            var tempResult = SQLHelper.UpdateEmotion("ED", splitStr[0], splitStr[1]);
+
+                            if (tempResult == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (tempResult == 0)
+                            {
+                                strMsg = "Failed,1";
+                            }
+                            else if (tempResult == 1)
+                            {
+                                strMsg = "EDINSERT OK";
+                            }
+                        }
+
+                    }
+
 
                     SendMessage(strMsg);
                     sw.WriteLine(strMsg);

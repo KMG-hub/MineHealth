@@ -756,6 +756,65 @@ namespace Utility
 
             return result;
         }
+
+        public static int InsertEmotion(string Category, string TestId, string path)
+        {
+            int result = -1;
+
+            string tableName = "";
+            if (string.IsNullOrEmpty(path))
+                path = "";
+            switch (Category)
+            {
+                case "EA":
+                    tableName = "EmotionATbl";
+                    break;
+
+                case "EB":
+                    tableName = "EmotionBTbl";
+                    break;
+
+                case "EC":
+                    tableName = "EmotionCTbl";
+                    break;
+                case "ED":
+                    tableName = "EmotionDTbl";
+                    break;
+
+                default:
+                    return -1;
+            }
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "INSERT INTO " + tableName
+                        + " (TestID, SavePath) VALUES ";
+
+                    qry += "('" + TestId + "', '" + path;
+                    qry += "');";
+
+                    Console.WriteLine("Query: " + qry);
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        result = cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                    return -1;
+                }
+            }
+
+
+            return result;
+        }
+
+
         public static int InsertPose(string Category, string TestId, List<string> Answer, string Score)
         {
             int result = -1;
@@ -819,6 +878,9 @@ namespace Utility
 
             return result;
         }
+
+
+
         public static int UpdateQuestion(string Category, string TestId, List<string> Answer, string Score)
         {
             int result = -1;
@@ -923,6 +985,63 @@ namespace Utility
 
             return result;
         }
+
+
+        public static int UpdateEmotion(string Category, string TestId, string path)
+        {
+            int result = -1;
+
+            string tableName = "";
+            if (string.IsNullOrEmpty(path))
+                path = "";
+            switch (Category)
+            {
+                case "EA":
+                    tableName = "EmotionATbl";
+                    break;
+
+                case "EB":
+                    tableName = "EmotionBTbl";
+                    break;
+
+                case "EC":
+                    tableName = "EmotionCTbl";
+                    break;
+                case "ED":
+                    tableName = "EmotionDTbl";
+                    break;
+
+                default:
+                    return -1;
+            }
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string qry = "UPDATE " + tableName + " SET ";
+                    qry += "TestId = '" + TestId + "' ";
+                    qry += "SavePath = '" + path + "' ";
+                    qry += "WHERE TestID = '" + TestId + "';";
+                    Console.WriteLine("Query: " + qry);
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(qry, conn))
+                    {
+                        result = cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("실패");
+                    Console.WriteLine(ex.ToString());
+                    return -1;
+                }
+            }
+
+
+            return result;
+        }
+
 
         public static int UpdatePose(string Category, string TestId, List<string> Answer, string Score)
         {
