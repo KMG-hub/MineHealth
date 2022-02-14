@@ -38,6 +38,7 @@ namespace MineHealth
             sw.Flush();
             try
             {
+                DateTime startdate = DateTime.Now;
                 while (true)
                 {
                     strMsg = sr.ReadLine();
@@ -800,6 +801,13 @@ namespace MineHealth
                             }
                         }
 
+                    }
+
+
+                    
+                    if (DateTime.Now - startdate > TimeSpan.FromSeconds(120))
+                    {
+                        break;
                     }
 
 

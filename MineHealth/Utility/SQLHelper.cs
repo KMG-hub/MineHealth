@@ -1020,7 +1020,7 @@ namespace Utility
                 try
                 {
                     string qry = "UPDATE " + tableName + " SET ";
-                    qry += "TestId = '" + TestId + "' ";
+                    qry += "TestId = '" + TestId + "', ";
                     qry += "SavePath = '" + path + "' ";
                     qry += "WHERE TestID = '" + TestId + "';";
                     Console.WriteLine("Query: " + qry);
@@ -1083,7 +1083,7 @@ namespace Utility
                         qry += jointsname[i] + " = '" + Answer[i] +"', ";
                     }
 
-                    qry += "Score = '" + Score + "' ";
+                    qry += "Score = '" + Score + "', ";
                     qry += "SavePath = '" + path + "' ";
                     qry += "WHERE TestID = '" + TestId + "'";
 
