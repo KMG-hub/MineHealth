@@ -47,6 +47,11 @@ namespace MineHealth
                         strMsg = string.Empty;
                     }
 
+                    if (DateTime.Now - startdate > TimeSpan.FromSeconds(120))
+                    {
+                        break;
+                    }
+
                     if (string.IsNullOrEmpty(strMsg))
                         continue;
 
@@ -804,11 +809,7 @@ namespace MineHealth
                     }
 
 
-                    
-                    if (DateTime.Now - startdate > TimeSpan.FromSeconds(120))
-                    {
-                        break;
-                    }
+                
 
 
                     SendMessage(strMsg);
