@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using Utility;
+using System.Threading;
 
 namespace MineHealth
 {
@@ -32,28 +33,29 @@ namespace MineHealth
             NetworkStream ns = client.GetStream();
             StreamReader sr = new StreamReader(ns);
             StreamWriter sw = new StreamWriter(ns);
-
             string welcome = "Server Connnect Success!";
             sw.WriteLine(welcome);
             sw.Flush();
             try
             {
                 DateTime startdate = DateTime.Now;
+                Thread timecheckThread;
                 while (true)
                 {
+                    //timecheckThread = new Thread(() => TimeChecking(120));
+                    //timecheckThread.Start();
                     strMsg = sr.ReadLine();
+                    //timecheckThread.Interrupt();
+
                     if (strMsg == null)
                     {
                         strMsg = string.Empty;
-                    }
-
-                    if (DateTime.Now - startdate > TimeSpan.FromSeconds(120))
-                    {
                         break;
                     }
 
+
                     if (string.IsNullOrEmpty(strMsg))
-                        continue;
+                        break;
 
                     Console.WriteLine("ME: {0}", strMsg);
                     if (strMsg == "exit")  //exit 메시지 수신시 종료하기
@@ -808,10 +810,6 @@ namespace MineHealth
 
                     }
 
-
-                
-
-
                     SendMessage(strMsg);
                     sw.WriteLine(strMsg);
                     sw.Flush();
@@ -819,6 +817,10 @@ namespace MineHealth
                 sw.Close();
                 sr.Close();
                 ns.Close();
+
+                sw.Dispose();
+                sr.Dispose();
+                ns.Dispose();
             }
             catch (Exception ex)
             {
@@ -827,6 +829,19 @@ namespace MineHealth
             }
             SendMessage("Client 연결 종료!");
         }
+
+        private void TimeChecking(int second)
+        {
+            var startdate = DateTime.Now;
+            while (startdate - DateTime.Now < TimeSpan.FromSeconds(second))
+            {
+
+            }
+
+
+        }
+
+
         /* private void Running()
         {
 
