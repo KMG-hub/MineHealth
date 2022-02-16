@@ -33,26 +33,18 @@ namespace MineHealth
             NetworkStream ns = client.GetStream();
             StreamReader sr = new StreamReader(ns);
             StreamWriter sw = new StreamWriter(ns);
+
+            ns.ReadTimeout = 10000;
+
             string welcome = "Server Connnect Success!";
             sw.WriteLine(welcome);
             sw.Flush();
             try
             {
-                DateTime startdate = DateTime.Now;
-                Thread timecheckThread;
+
                 while (true)
                 {
-                    //timecheckThread = new Thread(() => TimeChecking(120));
-                    //timecheckThread.Start();
                     strMsg = sr.ReadLine();
-                    //timecheckThread.Interrupt();
-
-                    if (strMsg == null)
-                    {
-                        strMsg = string.Empty;
-                        break;
-                    }
-
 
                     if (string.IsNullOrEmpty(strMsg))
                         break;
@@ -828,17 +820,6 @@ namespace MineHealth
                 ClientExit?.Invoke(client, EventArgs.Empty);
             }
             SendMessage("Client 연결 종료!");
-        }
-
-        private void TimeChecking(int second)
-        {
-            var startdate = DateTime.Now;
-            while (startdate - DateTime.Now < TimeSpan.FromSeconds(second))
-            {
-
-            }
-
-
         }
 
 
