@@ -59,7 +59,7 @@ try
                 Console.WriteLine("접속 종료!");
             }
             catch (SocketException e)
-            {
+            { 
                 Console.WriteLine(e.ToString());
             }
 #endif
