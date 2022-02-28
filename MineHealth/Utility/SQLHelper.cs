@@ -864,9 +864,9 @@ namespace Utility
                     }
                     qry += $"SACRUM, C7";
                     qry += $") VALUES (";
-                    qry += $"{TestId}, {Score}, '', '', '', ";
-                    Answer.ForEach(x => qry += $"{x.Replace(" ", "")}, ");
-                    qry.Substring(0, qry.Length - 2);
+                    qry += $"'{TestId}', '{Score}', '', '', '', ";
+                    Answer.ForEach(x => qry += $"'{x.Replace(" ", "")}', ");
+                    qry = qry.Remove(qry.Length - 2, 2);
                     qry += ");";
                     Console.WriteLine("Query: " + qry);
                     conn.Open();
@@ -882,7 +882,7 @@ namespace Utility
                     return -1;
                 }
             }
-
+            
 
             return result;
         }
