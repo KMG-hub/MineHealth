@@ -643,18 +643,42 @@ namespace MineHealth
                         }
                     }
 
-                    // 자세A 테스트 기록 입력, PAINSERT [TESTID],[POINT0~31],[SCORE]
+                    // 자세A 테스트 기록 입력, PAINSERT [TESTID],[POINT0~33],[SavePath],[Score]
                     else if (strMsg.Contains("PAINSERT "))
                     {
                         strMsg = strMsg.Replace("PAINSERT ", "");
                         var splitStr = strMsg.Split(',');
-                        if (splitStr.Length == 67)
+                        if (splitStr.Length == 71)
                         {
                             List<string> list = new List<string>();
-                            for (int i = 0; i < 64; i=i+2)
+                            for (int i = 0; i < 68; i = i + 2)
                             {
                                 list.Add(splitStr[i + 1] + "," +splitStr[i + 2]);
                             }
+                            var tempResult = SQLHelper.UpdatePose("PA", splitStr[0], list, splitStr[69], splitStr[70]);
+
+                            if (tempResult == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (tempResult == 0)
+                            {
+                                strMsg = "Failed,1";
+                            }
+                            else if (tempResult == 1)
+                            {
+                                strMsg = "PAINSERT OK";
+                            }
+                        }
+                        else if (splitStr.Length == 67)
+                        {
+                            List<string> list = new List<string>();
+                            for (int i = 0; i < 64; i = i + 2)
+                            {
+                                list.Add(splitStr[i + 1] + "," + splitStr[i + 2]);
+                            }
+                            list.Add("<0, 0>");
+                            list.Add("<0, 0>");
                             var tempResult = SQLHelper.UpdatePose("PA", splitStr[0], list, splitStr[65], splitStr[66]);
 
                             if (tempResult == -1)
@@ -681,13 +705,37 @@ namespace MineHealth
                     {
                         strMsg = strMsg.Replace("PBINSERT ", "");
                         var splitStr = strMsg.Split(',');
-                        if (splitStr.Length == 67)
+                        if (splitStr.Length == 71)
+                        {
+                            List<string> list = new List<string>();
+                            for (int i = 0; i < 68; i = i + 2)
+                            {
+                                list.Add(splitStr[i + 1] + "," + splitStr[i + 2]);
+                            }
+                            var tempResult = SQLHelper.UpdatePose("PB", splitStr[0], list, splitStr[69], splitStr[70]);
+
+                            if (tempResult == -1)
+                            {
+                                strMsg = "Failed,-1";
+                            }
+                            else if (tempResult == 0)
+                            {
+                                strMsg = "Failed,1";
+                            }
+                            else if (tempResult == 1)
+                            {
+                                strMsg = "PBINSERT OK";
+                            }
+                        }
+                        else if (splitStr.Length == 67)
                         {
                             List<string> list = new List<string>();
                             for (int i = 0; i < 64; i = i + 2)
                             {
                                 list.Add(splitStr[i + 1] + "," + splitStr[i + 2]);
                             }
+                            list.Add("<0, 0>");
+                            list.Add("<0, 0>");
                             var tempResult = SQLHelper.UpdatePose("PB", splitStr[0], list, splitStr[65], splitStr[66]);
 
                             if (tempResult == -1)

@@ -756,7 +756,6 @@ namespace Utility
 
             return result;
         }
-
         public static int InsertEmotion(string Category, string TestId, string path)
         {
             int result = -1;
@@ -813,8 +812,6 @@ namespace Utility
 
             return result;
         }
-
-
         public static int InsertPose(string Category, string TestId, List<string> Answer, string Score)
         {
             int result = -1;
@@ -842,7 +839,7 @@ namespace Utility
                     "<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>",
                     "<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>",
                     "<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>","<0,0>",
-                    "<0,0>","<0,0>"
+                    "<0,0>","<0,0>","<0,0>","<0,0>"
                 };
             }
 
@@ -850,16 +847,27 @@ namespace Utility
             {
                 try
                 {
-                    string qry = "INSERT INTO " + tableName;
-                    qry += " VALUES (0,'" + TestId + "','" + Score + "','','','";
-                    foreach (var item in Answer)
+                    string qry = $"INSERT INTO {tableName} (" +
+                        $"TestID, Score, Level, CommentID, SavePath, ";
+                    List<string> jointsname = new List<string>()
                     {
-                        
-                        qry += "','" + item.Replace(" ", "");
+                        "PELVIS", "SPINE_NAVAL", "SPINE_CHEST", "NECK",
+                        "CLAVICLE_LEFT", "SHOULDER_LEFT", "ELBOW_LEFT", "WRIST_LEFT", "HAND_LEFT", "HANDTIP_LEFT", "THUMB_LEFT",
+                        "CLAVICLE_RIGHT", "SHOULDER_RIGHT", "ELBOW_RIGHT", "WRIST_RIGHT", "HAND_RIGHT", "HANDTIP_RIGHT", "THUMB_RIGHT",
+                        "HIP_LEFT", "KNEE_LEFT", "ANKLE_LEFT", "FOOT_LEFT",
+                        "HIP_RIGHT", "KNEE_RIGHT", "ANKLE_RIGHT", "FOOT_RIGHT",
+                        "HEAD", "NOSE", "EYE_LEFT", "EAR_LEFT", "EYE_RIGHT", "EAR_RIGHT"
+                    };
+                    foreach (var joint in jointsname)
+                    {
+                        qry += $"{joint}, ";
                     }
-
-                    qry += "',CURRENT_TIMESTAMP());";
-
+                    qry += $"SACRUM, C7";
+                    qry += $") VALUES (";
+                    qry += $"{TestId}, {Score}, '', '', '', ";
+                    Answer.ForEach(x => qry += $"{x.Replace(" ", "")}, ");
+                    qry.Substring(0, qry.Length - 2);
+                    qry += ");";
                     Console.WriteLine("Query: " + qry);
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(qry, conn))
@@ -878,9 +886,6 @@ namespace Utility
 
             return result;
         }
-
-
-
         public static int UpdateQuestion(string Category, string TestId, List<string> Answer, string Score)
         {
             int result = -1;
@@ -956,7 +961,7 @@ namespace Utility
                                 level = "B";
                             else if (Convert.ToDouble(Score) <= 30)
                                 level = "C";
-                            else if (Convert.ToDouble(Score) <= 40)
+                            else
                                 level = "D";
                             break;
                     }
@@ -985,8 +990,6 @@ namespace Utility
 
             return result;
         }
-
-
         public static int UpdateEmotion(string Category, string TestId, string path)
         {
             int result = -1;
@@ -1041,13 +1044,9 @@ namespace Utility
 
             return result;
         }
-
-
         public static int UpdatePose(string Category, string TestId, List<string> Answer, string path, string Score)
         {
             int result = -1;
-
-
             string tableName = "";
             switch (Category)
             {
@@ -1069,7 +1068,7 @@ namespace Utility
                     "CLAVICLE_RIGHT", "SHOULDER_RIGHT", "ELBOW_RIGHT", "WRIST_RIGHT", "HAND_RIGHT", "HANDTIP_RIGHT", "THUMB_RIGHT",
                     "HIP_LEFT", "KNEE_LEFT", "ANKLE_LEFT", "FOOT_LEFT",
                     "HIP_RIGHT", "KNEE_RIGHT", "ANKLE_RIGHT", "FOOT_RIGHT",
-                    "HEAD", "NOSE", "EYE_LEFT", "EAR_LEFT", "EYE_RIGHT", "EAR_RIGHT"
+                    "HEAD", "NOSE", "EYE_LEFT", "EAR_LEFT", "EYE_RIGHT", "EAR_RIGHT", "SACRUM", "C7"
             };
 
             using (MySqlConnection conn = new MySqlConnection(connStr))
@@ -1108,4 +1107,8 @@ namespace Utility
     }
 }
 
-//PAINSERT 29706ffc-67bc-11ec-a9a5-6c0b84653419,<123,456>, <123,457>, <123,458>, <123,459>, <123,460>, <123,461>, <123,462>, <123,463>, <123,464>, <123,465>, <123,466>, <123,467>, <123,468>, <123,469>, <123,470>, <123,471>, <123,472>, <123,473>, <123,474>, <123,475>, <123,476>, <123,477>, <123,478>, <123,479>, <123,480>, <123,481>, <123,482>, <123,483>, <123,484>, <123,485>, <123,486>, <123,487>,10
+//PAINSERT
+//29706ffc-67bc-11ec-a9a5-6c0b84653419,
+//<123,456>, <123,457>, <123,458>, <123,459>, <123,460>, <123,461>, <123,462>, <123,463>, <123,464>, <123,465>, <123,466>, <123,467>, <123,468>, <123,469>, <123,470>, <123,471>, <123,472>, <123,473>, <123,474>, <123,475>, <123,476>, <123,477>, <123,478>, <123,479>, <123,480>, <123,481>, <123,482>, <123,483>, <123,484>, <123,485>, <123,486>, <123,487>,
+
+//10
