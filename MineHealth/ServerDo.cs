@@ -897,9 +897,9 @@ namespace MineHealth
             var xa = EarLeftX;
             var ya = EarLeftY;
             var xb = C7X;
-            var yb = EarLeftY;
+            var yb = C7Y;
             var xc = EarLeftX;
-            var yc = EarLeftY;
+            var yc = C7Y;
 
             var theta = Math.Atan2(yb - ya, xb - xa) - Math.Atan2(yb - yc, xb - xc);
             theta = theta * 180 / Math.PI;
@@ -908,7 +908,6 @@ namespace MineHealth
 
             return result;
         }
-
         private string Cal_YAData(List<string> datas)
         {
             string result = "";
