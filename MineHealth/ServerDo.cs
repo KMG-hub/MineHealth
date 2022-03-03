@@ -655,7 +655,7 @@ namespace MineHealth
                             {
                                 list.Add(splitStr[i + 1] + "," +splitStr[i + 2]);
                             }
-                            var tempResult = SQLHelper.UpdatePose("PA", splitStr[0], list, splitStr[69], splitStr[70]);
+                            var tempResult = SQLHelper.UpdatePose("PA", splitStr[0], list, splitStr[69], Cal_YAData(list));
 
                             if (tempResult == -1)
                             {
@@ -700,7 +700,7 @@ namespace MineHealth
                         }
                     }
 
-                    // 자세B 테스트 기록 입력, PBINSERT [TESTID],[POINT0~31],[SCORE]
+                    // 자세B 테스트 기록 입력, PBINSERT [TESTID],[POINT0~33],[SavePath],[SCORE]
                     else if (strMsg.Contains("PBINSERT "))
                     {
                         strMsg = strMsg.Replace("PBINSERT ", "");
@@ -712,7 +712,7 @@ namespace MineHealth
                             {
                                 list.Add(splitStr[i + 1] + "," + splitStr[i + 2]);
                             }
-                            var tempResult = SQLHelper.UpdatePose("PB", splitStr[0], list, splitStr[69], splitStr[70]);
+                            var tempResult = SQLHelper.UpdatePose("PB", splitStr[0], list, splitStr[69], Cal_TNData(list));
 
                             if (tempResult == -1)
                             {
@@ -873,6 +873,99 @@ namespace MineHealth
             SendMessage("Client 연결 종료!");
         }
 
+        private string Cal_TNData(List<string> datas)
+        {
+            string result = "";
+
+            string tempA = datas[(int)JointId.EarLeft].Replace("<", "").Replace("(", "").Replace(")", "").Replace(">", "");
+            string[] tempsA = tempA.Split(",");
+
+            string tempB = datas[(int)JointId.Neck].Replace("<", "").Replace("(", "").Replace(")", "").Replace(">", "");
+            string[] tempsB = tempB.Split(",");
+
+
+            if (tempsA.Length != 2 || tempsB.Length != 2)
+                return result;
+
+
+            double EarLeftX = Convert.ToDouble(tempsA[0]);
+            double EarLeftY = Convert.ToDouble(tempsA[1]);
+
+            double C7X = Convert.ToDouble(tempsB[0]);
+            double C7Y = Convert.ToDouble(tempsB[1]);
+
+            var xa = EarLeftX;
+            var ya = EarLeftY;
+            var xb = C7X;
+            var yb = EarLeftY;
+            var xc = EarLeftX;
+            var yc = EarLeftY;
+
+            var theta = Math.Atan2(yb - ya, xb - xa) - Math.Atan2(yb - yc, xb - xc);
+            theta = theta * 180 / Math.PI;
+
+            result = theta.ToString("0.00");
+
+            return result;
+        }
+
+        private string Cal_YAData(List<string> datas)
+        {
+            string result = "";
+
+            string tempA = datas[(int)JointId.ClavicleLeft].Replace("<", "").Replace("(", "").Replace(")", "").Replace(">", "");
+            string[] tempsA = tempA.Split(",");
+
+            string tempB = datas[(int)JointId.ClavicleRight].Replace("<", "").Replace("(", "").Replace(")", "").Replace(">", "");
+            string[] tempsB = tempB.Split(",");
+
+            string tempC = datas[(int)JointId.SpineChest].Replace("<", "").Replace("(", "").Replace(")", "").Replace(">", "");
+            string[] tempsC = tempC.Split(",");
+
+            string tempD = datas[(int)JointId.SpineNavel].Replace("<", "").Replace("(", "").Replace(")", "").Replace(">", "");
+            string[] tempsD = tempD.Split(",");
+
+
+            if (tempsA.Length != 2 || tempsB.Length != 2 || tempsC.Length != 2 || tempsD.Length != 2)
+                return result;
+
+
+            double EClavicleRightX = Convert.ToDouble(tempsA[0]);
+            double EClavicleRightY = Convert.ToDouble(tempsA[1]);
+            double EClavicleLeftX = Convert.ToDouble(tempsB[0]);
+            double EClavicleLeftY = Convert.ToDouble(tempsB[1]);
+            double SpineChestX = Convert.ToDouble(tempsC[0]);
+            double SpineChestY = Convert.ToDouble(tempsC[1]);
+            double SpineNavelX = Convert.ToDouble(tempsD[0]);
+            double SpineNavelY = Convert.ToDouble(tempsD[1]);
+
+
+            var Axa = EClavicleRightX;
+            var Aya = EClavicleRightY;
+            var Axb = SpineChestX;
+            var Ayb = SpineChestY;
+            var Axc = SpineNavelX;
+            var Ayc = SpineNavelY;
+
+            var Atheta = Math.Atan2(Ayb - Aya, Axb - Axa) - Math.Atan2(Ayb - Ayc, Axb - Axc);
+            Atheta = Atheta * 180 / Math.PI;
+
+
+            var Bxa = EClavicleLeftX;
+            var Bya = EClavicleLeftY;
+            var Bxb = SpineChestX;
+            var Byb = SpineChestY;
+            var Bxc = SpineNavelX;
+            var Byc = SpineNavelY;
+
+            var Btheta = Math.Atan2(Byb - Bya, Bxb - Bxa) - Math.Atan2(Byb - Byc, Bxb - Bxc);
+            Btheta = 360 - Btheta * 180 / Math.PI;
+
+
+            result = $"{Atheta.ToString("0.00")}:{Btheta.ToString("0.00")}";
+
+            return result;
+        }
 
         /* private void Running()
         {
@@ -1026,5 +1119,149 @@ namespace MineHealth
             if (!string.IsNullOrWhiteSpace(msg))
                 Console.WriteLine("client#{0}: {1}, {2}", clientNo, msg, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff"));
         }
+    }
+
+    public enum JointId
+    {
+        //
+        // 요약:
+        //     Pelvis
+        Pelvis = 0,
+        //
+        // 요약:
+        //     Spine navel
+        SpineNavel = 1,
+        //
+        // 요약:
+        //     Spine chest
+        SpineChest = 2,
+        //
+        // 요약:
+        //     Neck
+        Neck = 3,
+        //
+        // 요약:
+        //     Left clavicle
+        ClavicleLeft = 4,
+        //
+        // 요약:
+        //     Left shoulder
+        ShoulderLeft = 5,
+        //
+        // 요약:
+        //     Left elbow
+        ElbowLeft = 6,
+        //
+        // 요약:
+        //     Left wrist
+        WristLeft = 7,
+        //
+        // 요약:
+        //     Left hand
+        HandLeft = 8,
+        //
+        // 요약:
+        //     Left hand tip
+        HandTipLeft = 9,
+        //
+        // 요약:
+        //     Left thumb
+        ThumbLeft = 10,
+        //
+        // 요약:
+        //     Right clavicle
+        ClavicleRight = 11,
+        //
+        // 요약:
+        //     Right shoulder
+        ShoulderRight = 12,
+        //
+        // 요약:
+        //     Right elbow
+        ElbowRight = 13,
+        //
+        // 요약:
+        //     Right wrist
+        WristRight = 14,
+        //
+        // 요약:
+        //     Right hand
+        HandRight = 15,
+        //
+        // 요약:
+        //     Right hand tip
+        HandTipRight = 16,
+        //
+        // 요약:
+        //     Right thumb
+        ThumbRight = 17,
+        //
+        // 요약:
+        //     Left hip
+        HipLeft = 18,
+        //
+        // 요약:
+        //     Left knee
+        KneeLeft = 19,
+        //
+        // 요약:
+        //     Left ankle
+        AnkleLeft = 20,
+        //
+        // 요약:
+        //     Left foot
+        FootLeft = 21,
+        //
+        // 요약:
+        //     Right hip
+        HipRight = 22,
+        //
+        // 요약:
+        //     Right knee
+        KneeRight = 23,
+        //
+        // 요약:
+        //     Right ankle
+        AnkleRight = 24,
+        //
+        // 요약:
+        //     Right foot
+        FootRight = 25,
+        //
+        // 요약:
+        //     Head
+        Head = 26,
+        //
+        // 요약:
+        //     Nose
+        Nose = 27,
+        //
+        // 요약:
+        //     Left eye
+        EyeLeft = 28,
+        //
+        // 요약:
+        //     Left ear
+        EarLeft = 29,
+        //
+        // 요약:
+        //     Right eye
+        EyeRight = 30,
+        //
+        // 요약:
+        //     Right ear
+        EarRight = 31,
+        //
+        // 요약:
+        //     Right ear
+        Sacrum = 32,
+        //
+        // 요약:
+        //     Right ear
+        C7 = 33,
+        //
+        // 요약:
+        //     Number of different joints defined in this enumeration.
+        Count = 34
     }
 }
