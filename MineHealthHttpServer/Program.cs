@@ -13,7 +13,7 @@ namespace MineHealthHttpServer
         static void Main(string[] args)
         {
             WebServer server = new WebServer();
-            server.AddBindingAddress("http://localhost:9092/");
+            server.AddBindingAddress("http://minehealth.awesomepia.kr:9092/");
 
             server.RootPath = "c:\\wwwroot";
             server.ActionRequested += server_ActionRequested;
