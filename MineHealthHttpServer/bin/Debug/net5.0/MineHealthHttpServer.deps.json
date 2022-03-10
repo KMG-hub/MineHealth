@@ -7,30 +7,8 @@
   "targets": {
     ".NETCoreApp,Version=v5.0": {
       "MineHealthHttpServer/1.0.0": {
-        "dependencies": {
-          "Griffin.WebServer": "0.5.3"
-        },
         "runtime": {
           "MineHealthHttpServer.dll": {}
-        }
-      },
-      "Griffin.Framework/1.0.42": {
-        "runtime": {
-          "lib/net45/Griffin.Core.dll": {
-            "assemblyVersion": "1.0.42.0",
-            "fileVersion": "1.0.42.0"
-          }
-        }
-      },
-      "Griffin.WebServer/0.5.3": {
-        "dependencies": {
-          "Griffin.Framework": "1.0.42"
-        },
-        "runtime": {
-          "lib/net40/Griffin.WebServer.dll": {
-            "assemblyVersion": "0.5.3.0",
-            "fileVersion": "0.5.3.0"
-          }
         }
       }
     }
@@ -40,20 +18,6 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
-    },
-    "Griffin.Framework/1.0.42": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-eEVYrmpJuUPk45DcK4v1lElwU7Bk47qNMbr/nOlu0gHAeOEDThfTp0D3JU9JRDQAHV+dnyEAAH5o+4gbyM3+IQ==",
-      "path": "griffin.framework/1.0.42",
-      "hashPath": "griffin.framework.1.0.42.nupkg.sha512"
-    },
-    "Griffin.WebServer/0.5.3": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-afRCMzmEl6EHZtYF52/eCzJ8Mfe2PemmpbqAdCYfUbzOrRTbFoEGqhZMpaszRZ2FCK22omm1wV60j4q1f2seuA==",
-      "path": "griffin.webserver/0.5.3",
-      "hashPath": "griffin.webserver.0.5.3.nupkg.sha512"
     }
   }
 }

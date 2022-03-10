@@ -5,8 +5,4 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Griffin.WebServer" Version="0.5.3" />
-  </ItemGroup>
-
 </Project>
