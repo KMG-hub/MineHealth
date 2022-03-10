@@ -1104,6 +1104,52 @@ namespace Utility
 
             return result;
         }
+
+        public enum ScoreCategory
+        {
+            FrontAngle = 0,
+            SideAngle = 1,
+            SideNeck = 2
+        }
+        public static bool SaveScoreDatas(string TestId, ScoreCategory sc, string score)
+        {
+            bool result = false;
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string valueqry = "";
+                    switch (sc)
+                    {
+                        case ScoreCategory.FrontAngle:
+                            valueqry = "ScoreFA";
+                            break;
+                        case ScoreCategory.SideAngle:
+                            valueqry = "ScoreSA";
+                            break;
+                        case ScoreCategory.SideNeck:
+                            valueqry = "ScoreSN";
+                            break;
+                        default:
+                            return false;
+                            break;
+                    }
+
+                    string Query = $"UPDATE ResultScoreTbl SET {valueqry} = '{score}' WHERE TestID = '{TestId}'";
+                    conn.Open();
+                    using (MySqlCommand cmd = new(Query, conn))
+                    {
+                        if (cmd.ExecuteNonQuery() > 0)
+                            result = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //Debug.WriteLine(ex.Message);
+                }
+            }
+            return result;
+        }
     }
 }
 

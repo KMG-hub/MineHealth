@@ -543,7 +543,6 @@ namespace MineHealth
                         }
 
                     }
-
                     // 질문A 테스트 기록 입력, QAINSERT [TESTID],[Answer0~9],[Score]
                     else if (strMsg.Contains("QAINSERT "))
                     {
@@ -576,7 +575,6 @@ namespace MineHealth
                             strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
                         }
                     }
-
                     // 질문B 테스트 기록 입력, QBINSERT [TESTID],[Answer0~6],[Score]
                     else if (strMsg.Contains("QBINSERT "))
                     {
@@ -609,7 +607,6 @@ namespace MineHealth
                             strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
                         }
                     }
-
                     // 질문C 테스트 기록 입력, QCINSERT [TESTID],[Answer0~9],[Score]
                     else if (strMsg.Contains("QCINSERT "))
                     {
@@ -642,7 +639,6 @@ namespace MineHealth
                             strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
                         }
                     }
-
                     // 자세A 테스트 기록 입력, PAINSERT [TESTID],[POINT0~33],[SavePath],[Score]
                     else if (strMsg.Contains("PAINSERT "))
                     {
@@ -655,8 +651,9 @@ namespace MineHealth
                             {
                                 list.Add(splitStr[i + 1] + "," +splitStr[i + 2]);
                             }
-                            var tempResult = SQLHelper.UpdatePose("PA", splitStr[0], list, splitStr[69], Cal_YAData(list));
-
+                            string cal_score = Cal_YAData(list);
+                            var tempResult = SQLHelper.UpdatePose("PA", splitStr[0], list, splitStr[69], cal_score);
+                            SQLHelper.SaveScoreDatas(splitStr[0], SQLHelper.ScoreCategory.FrontAngle, cal_score);
                             if (tempResult == -1)
                             {
                                 strMsg = "Failed,-1";
@@ -699,7 +696,6 @@ namespace MineHealth
                             strMsg = "Failed,2";   // 실패, 모든 정보가 입력되지 않음.
                         }
                     }
-
                     // 자세B 테스트 기록 입력, PBINSERT [TESTID],[POINT0~33],[SavePath],[SCORE]
                     else if (strMsg.Contains("PBINSERT "))
                     {
@@ -712,7 +708,14 @@ namespace MineHealth
                             {
                                 list.Add(splitStr[i + 1] + "," + splitStr[i + 2]);
                             }
-                            var tempResult = SQLHelper.UpdatePose("PB", splitStr[0], list, splitStr[69], Cal_TNData(list));
+
+                            string cal_score_neck = Cal_TNData(list);
+                            string cal_score_spine = Cal_RTData(list);
+
+                            var tempResult = SQLHelper.UpdatePose("PB", splitStr[0], list, splitStr[69], $"{cal_score_neck}/{cal_score_spine}");
+
+                            SQLHelper.SaveScoreDatas(splitStr[0], SQLHelper.ScoreCategory.SideNeck, cal_score_neck);
+                            SQLHelper.SaveScoreDatas(splitStr[0], SQLHelper.ScoreCategory.SideAngle, cal_score_spine);
 
                             if (tempResult == -1)
                             {
@@ -961,11 +964,44 @@ namespace MineHealth
             Btheta = 360 - Btheta * 180 / Math.PI;
 
 
-            result = $"{Atheta.ToString("0.00")}:{Btheta.ToString("0.00")}";
+            //result = $"{Atheta.ToString("0.00")}:{Btheta.ToString("0.00")}";
+            result = Math.Abs(Atheta - Btheta).ToString("0.00");
 
             return result;
         }
 
+        private string Cal_RTData(List<string> datas)
+        {
+            string result = "";
+
+            string tempA = datas[(int)JointId.Neck].Replace("<", "").Replace("(", "").Replace(")", "").Replace(">", "");
+            string[] tempsA = tempA.Split(",");
+
+            string tempB = datas[(int)JointId.Pelvis].Replace("<", "").Replace("(", "").Replace(")", "").Replace(">", "");
+            string[] tempsB = tempB.Split(",");
+
+            string tempC = datas[(int)JointId.Sacrum].Replace("<", "").Replace("(", "").Replace(")", "").Replace(">", "");
+            string[] tempsC = tempC.Split(",");
+
+            if (tempsA.Length != 2 || tempsB.Length != 2 || tempsC.Length != 2)
+                return result;
+
+            double NeckX = Convert.ToDouble(tempsA[0]);
+            //double NeckY = Convert.ToDouble(tempsA[1]);
+            double PelvisX = Convert.ToDouble(tempsB[0]);
+            //double PelvisY = Convert.ToDouble(tempsB[1]);
+            double SacrumX = Convert.ToDouble(tempsC[0]);
+            //double SacrumY = Convert.ToDouble(tempsC[1]);
+
+            var c7_sacrum_length = NeckX - SacrumX;
+            var pelvis_sacrum_length = PelvisX - SacrumX;
+            var ratio = c7_sacrum_length / pelvis_sacrum_length;
+
+
+            result = ratio.ToString("0.00");
+
+            return result;
+        }
         /* private void Running()
         {
 
