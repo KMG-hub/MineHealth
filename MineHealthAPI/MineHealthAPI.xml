@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MineHealthAPI</name>
+    </assembly>
+    <members>
+        <member name="T:MineHealthAPI.Controllers.StressController">
+            <summary>
+            스트레스 점수 조회
+            </summary>
+        </member>
+    </members>
+</doc>

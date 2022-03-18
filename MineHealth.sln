@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MineHealthRestAPI", "MineHe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MineHealthHttpServer", "MineHealthHttpServer\MineHealthHttpServer.csproj", "{FF34CFE7-38B3-42D1-87DF-B4EEC59A5CEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MineHealthAPI", "MineHealthAPI\MineHealthAPI.csproj", "{A13BF15D-C643-4287-B248-5F91ED696713}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MineHealthAPI", "MineHealthAPI\MineHealthAPI.csproj", "{A13BF15D-C643-4287-B248-5F91ED696713}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

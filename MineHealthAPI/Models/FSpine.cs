@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MineHealthAPI
+namespace MineHealthAPI.Models
 {
-    public class Neck
+    public class FSpine
     {
         public string Phone { get; set; }
         public string TestDate { get; set; }

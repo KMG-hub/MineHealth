@@ -20,8 +20,27 @@ namespace MineHealthAPI
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    //webBuilder.UseHttpSys(options =>
+                    //{
+                    //    options.UrlPrefixes.Add("http://localhost:9000");
+                    //    options.UrlPrefixes.Add("http://172.30.1.127:44336");
+                    //    options.UrlPrefixes.Add("https://172.30.1.127:44");
+                    //});
                     
+
+                    webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        serverOptions.ListenAnyIP(44336);
+                    });
+
+                    webBuilder.UseStartup<Startup>();
+                    //webBuilder.UseHttpSys(options =>
+                    //{
+                    //    options.UrlPrefixes.Add("http://localhost:9000");
+                    //    options.UrlPrefixes.Add("http://172.30.1.127:44336");
+                    //    options.UrlPrefixes.Add("https://172.30.1.127:44");
+                    //});
+
                 });
     }
 }

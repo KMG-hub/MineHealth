@@ -18,19 +18,19 @@ namespace MineHealthAPI
         private const string connStr = "Server=" + ServerIP + ";Port=" + Port + ";Database=" + DataBase + ";Uid=" + Uid + ";Pwd=" + Pwd;
        
         //"SELECT Phone, TestID, TestDate, CAST(ULT.TestDate AS DATETIME) AS DT FROM UserLogTbl AS ULT WHERE Phone = '01077777777' ORDER BY ABS(TIMESTAMPDIFF(SECOND, TestDate, '2022-02-09 10:19:25'));"
-        public static string[] GetScore(ScoreCategory category, string phone, string TestDate)
+        public static string[] GetPostureScore(PostureCategory category, string phone, string TestDate)
         {
             string[] result = new string[3];
             string columnname = "";
             switch (category)
             {
-                case ScoreCategory.FrontSpine:
+                case PostureCategory.FrontSpine:
                     columnname = "ScoreFA";
                     break;
-                case ScoreCategory.SideNeck:
+                case PostureCategory.SideNeck:
                     columnname = "ScoreSN";
                     break;
-                case ScoreCategory.SideSpine:
+                case PostureCategory.SideSpine:
                     columnname = "ScoreSA";
                     break;
             }
@@ -47,7 +47,7 @@ namespace MineHealthAPI
                     string query = $"SELECT RST.{columnname}, ULT.Phone, ULT.TestDate FROM ResultScoreTbl AS RST " +
                         $"INNER JOIN UserLogTbl AS ULT ON RST.TestID = ULT.TestID " +
                         $"WHERE RST.TestID = (SELECT TestID FROM UserLogTbl " +
-                        $"WHERE Phone = '{phone}' ORDER BY ABS(TIMESTAMPDIFF(SECOND, CAST(TestDate AS DATETIME), '{TestDate}')) LIMIT 1);";
+                        $"WHERE Phone = '{phone}' ORDER BY ABS(TIMESTAMPDIFF(SECOND, CAST(TestDate AS DATETIME), '{TestDate}')) ASC, TestDate DESC LIMIT 1);";
 
 
                     conn.Open();
@@ -75,11 +75,69 @@ namespace MineHealthAPI
             return result;
         }
 
-        public enum ScoreCategory
+        public static string[] GetEmotionScore(EmotionCategory category, string phone, string TestDate)
+        {
+            string[] result = new string[3];
+            string tablename = "";
+            switch (category)
+            {
+                case EmotionCategory.Despressed:
+                    tablename = "QuestionATbl";
+                    break;
+                case EmotionCategory.Anxeity:
+                    tablename = "QuestionBTbl";
+                    break;
+                case EmotionCategory.Stress:
+                    tablename = "QuestionCTbl";
+                    break;
+            }
+
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    string query = $"SELECT RST.Score, ULT.Phone, ULT.TestDate FROM {tablename} AS RST " +
+                        $"INNER JOIN UserLogTbl AS ULT ON RST.TestID = ULT.TestID " +
+                        $"WHERE RST.TestID = (SELECT TestID FROM UserLogTbl " +
+                        $"WHERE Phone = '{phone}' ORDER BY ABS(TIMESTAMPDIFF(SECOND, CAST(TestDate AS DATETIME), '{TestDate}')) ASC, TestDate DESC LIMIT 1);";
+
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                result[0] = reader["Score"].ToString();
+                                result[1] = reader["Phone"].ToString();
+                                result[2] = reader["TestDate"].ToString();
+                            }
+                            reader.Close();
+                        }
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
+
+            return result;
+        }
+        public enum PostureCategory
         {
             FrontSpine,
             SideNeck,
-            SideSpine
+            SideSpine,
+        }
+
+        public enum EmotionCategory
+        {
+            Despressed,
+            Anxeity,
+            Stress,
         }
     }
 }
